@@ -1463,6 +1463,7 @@ module Typer(State : State.S) = struct
        - restrictions come from the logic declaration
        - shadowing is forbidden
     *)
+    | `Logic CMC v (* TODO verify CMC still uses SMT logics, may need its own case *)
     | `Logic Smtlib2 v ->
       let poly = T.Implicit in
       let var_infer = T.{
@@ -1616,6 +1617,7 @@ module Typer(State : State.S) = struct
     match lang_of_input input with
     | `Logic ICNF -> st
     | `Logic Dimacs -> st
+    | `Logic CMC _ (* TODO verify CMC still uses SMT logics, may need its own case *)
     | `Logic Smtlib2 _ ->
       let logic =
         match State.get smtlib2_forced_logic st with
@@ -2043,6 +2045,8 @@ module Make
       let st, l = Typer.decls st ~input ~loc:c.S.loc ~attrs:c.S.attrs l in
       let res : typechecked stmt = simple (decl_id c) c.S.loc (`Decls l) in
       st, (res)
+    (* TODO ... *)
+    | { S.descr = S.Def_sys; _ } -> st, simple (other_id c) c.S.loc `Reset
 
     (* Smtlib's proof/model instructions *)
     | { S.descr = S.Get_proof; _ } ->

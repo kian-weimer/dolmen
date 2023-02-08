@@ -25,6 +25,8 @@ module type S = sig
     (** iCNF format *)
     | Smtlib2 of Dolmen_smtlib2.Script.version
     (** Smtlib v2 latest version *)
+    | CMC of Dolmen_smtlib2.Script.version  (* TODO Remove version or use cmc variant *)
+    (** CMC format *)
     | Tptp of Dolmen_tptp.version
     (** TPTP format (including THF), latest version *)
     | Zf

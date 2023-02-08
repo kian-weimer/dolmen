@@ -12,6 +12,7 @@ module type S = sig
     | Dimacs
     | ICNF
     | Smtlib2 of Dolmen_smtlib2.Script.version
+    | CMC of Dolmen_smtlib2.Script.version (* TODO Remove version or use cmc variant *)
     | Tptp of Dolmen_tptp.version
     | Zf
 
@@ -69,6 +70,7 @@ module Make
     | Dimacs
     | ICNF
     | Smtlib2 of Dolmen_smtlib2.Script.version
+    | CMC of Dolmen_smtlib2.Script.version
     | Tptp of Dolmen_tptp.version
     | Zf
 
@@ -79,6 +81,7 @@ module Make
     "smt2",       Smtlib2 `Latest;
     "smt2.6",     Smtlib2 `V2_6;
     "psmt2",      Smtlib2 `Poly;
+    "cmc",        CMC `Latest;  (* TODO Remove version or use cmc variant *)
     "tptp",       Tptp `Latest;
     "tptp-6.3.0", Tptp `V6_3_0;
     "zf",         Zf;
@@ -108,6 +111,10 @@ module Make
     (module Dolmen_smtlib2.Script.V2_6.Make(L)(I)(T)(S) : S);
     Smtlib2 `Poly, ".psmt2",
     (module Dolmen_smtlib2.Script.Poly.Make(L)(I)(T)(S) : S);
+
+    (* CMC *)
+    CMC `Latest, ".cmc", (* TODO Remove version or use cmc variant *)
+    (module Dolmen_cmc.Make(L)(I)(T)(S) : S);
 
     (* TPTP *)
     Tptp `Latest, ".p",

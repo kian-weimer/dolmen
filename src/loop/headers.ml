@@ -48,10 +48,15 @@ module Field = struct
   (* Correspondance between fields and their names in languages *)
   let name lang field =
     match lang, field with
+    | Some Logic.CMC _, Lang_version
     | Some Logic.Smtlib2 _, Lang_version -> ":smt-lib-version"
+    | Some Logic.CMC _, Problem_source
     | Some Logic.Smtlib2 _, Problem_source -> ":source"
+    | Some Logic.CMC _, Problem_license
     | Some Logic.Smtlib2 _, Problem_license -> ":license"
+    | Some Logic.CMC _, Problem_category
     | Some Logic.Smtlib2 _, Problem_category -> ":category"
+    | Some Logic.CMC _, Problem_status
     | Some Logic.Smtlib2 _, Problem_status -> ":status"
     | _, Lang_version -> "Language version"
     | _, Problem_version -> "Problem version"

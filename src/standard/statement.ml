@@ -78,6 +78,8 @@ type descr =
   | Defs of def group
   | Decls of decl group
 
+  | Def_sys
+
   | Get_proof
   | Get_unsat_core
   | Get_unsat_assumptions
@@ -292,6 +294,8 @@ let rec print_descr fmt = function
   | Defs d -> print_group print_def fmt d
   | Decls d -> print_group print_decl fmt d
 
+  | Def_sys -> Format.fprintf fmt "TODO: Print define-system"
+
   | Get_proof -> Format.fprintf fmt "get-proof"
   | Get_unsat_core -> Format.fprintf fmt "get-unsat-core"
   | Get_unsat_assumptions -> Format.fprintf fmt "get-unsat-assumptions"
@@ -391,6 +395,10 @@ let group_decls ?loc ?attrs ~recursive l =
 
 let mk_defs ?loc ?attrs ~recursive defs =
   mk ?loc ?attrs (Defs { recursive; contents = defs; })
+
+let mk_def_sys ?loc ?attrs ~recursive defs =
+  let _ = recursive, defs in
+  mk ?loc ?attrs (Def_sys)
 
 let group_defs ?loc ?attrs ~recursive l =
   let defs, others = List.fold_left (fun (defs, others) s ->
@@ -509,6 +517,10 @@ let pred_def ?(loc=no_loc) id vars params body =
   mk_defs ~loc ~recursive:false [
     { loc; attrs; id; vars; params; ret_ty; body; }
   ]
+
+let sys_def ?loc id vars params ret_ty body = 
+  let _ = id, vars, params, ret_ty, body in
+  mk_def_sys ?loc ~recursive:false []
 
 let funs_def_rec ?loc l =
   let contents = List.map (fun (id, vars, params, ret_ty, body) ->
