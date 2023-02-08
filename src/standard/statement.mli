@@ -122,6 +122,9 @@ type descr =
   | Decls of decl group
   (** A list of potentially recursive type definitions. *)
 
+  | Def_sys
+  (** TODO: *)
+
   | Get_proof
   (** Get the proof of the last sequent (if it was proved). *)
   | Get_unsat_core

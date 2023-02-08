@@ -231,6 +231,7 @@ module Make(State : State.S) = struct
             | Logic.Zf
             | Logic.ICNF
             | Logic.Smtlib2 _
+            | Logic.CMC _
             | Logic.Alt_ergo -> s
             | Logic.Dimacs
             | Logic.Tptp _ ->
