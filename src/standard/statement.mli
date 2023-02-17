@@ -66,6 +66,28 @@ type def = {
 }
 (** Term definition. *)
 
+type sys_def = {
+  id     : Id.t;
+  input  : term list option;
+  output : term list option;
+  local  : term list option;
+  init   : term option;
+  trans  : term option;
+  inv    : term option;
+  subs   : (Id.t * Id.t * term list) list;
+}
+(** TODO *)
+
+type sys_check = {
+  id        : Id.t;
+  input     : term list option;
+  output    : term list option;
+  local     : term list option;
+  reachable : (Id.t * term) list;
+  queries   : (Id.t * term list) list;
+}
+(** TODO *)
+
 type 'a group = {
   contents : 'a list;
   recursive : bool;
@@ -122,7 +144,9 @@ type descr =
   | Decls of decl group
   (** A list of potentially recursive type definitions. *)
 
-  | Def_sys
+  | Def_sys of sys_def
+  (** TODO: *)
+  | Chk_sys of sys_check
   (** TODO: *)
 
   | Get_proof

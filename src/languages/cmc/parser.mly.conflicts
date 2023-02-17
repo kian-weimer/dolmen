@@ -1,0 +1,60 @@
+
+** Conflict (shift/reduce) in state 208.
+** Token involved: KEYWORD
+** This state is reached from file after reading:
+
+OPEN DEFINE_SYS SYMBOL system_var_dec
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+file 
+list(command) EOF 
+command list(command) 
+OPEN DEFINE_SYS system_def CLOSE 
+                (?)
+
+** In state 208, looking ahead at KEYWORD, reducing production
+** list(system_var_dec) ->
+** is permitted because of the following sub-derivation:
+
+SYMBOL list(system_var_dec) list(system_cond_def) // lookahead token appears because list(system_cond_def) can begin with KEYWORD
+       system_var_dec list(system_var_dec) // lookahead token is inherited
+                      . 
+
+** In state 208, looking ahead at KEYWORD, shifting is permitted
+** because of the following sub-derivation:
+
+SYMBOL list(system_var_dec) list(system_cond_def) 
+       system_var_dec list(system_var_dec) 
+                      system_var_dec list(system_var_dec) 
+                      . KEYWORD OPEN list(sorted_var) CLOSE 
+
+** Conflict (shift/reduce) in state 201.
+** Token involved: KEYWORD
+** This state is reached from file after reading:
+
+OPEN DEFINE_SYS SYMBOL
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+file 
+list(command) EOF 
+command list(command) 
+OPEN DEFINE_SYS system_def CLOSE 
+                (?)
+
+** In state 201, looking ahead at KEYWORD, reducing production
+** list(system_var_dec) ->
+** is permitted because of the following sub-derivation:
+
+SYMBOL list(system_var_dec) list(system_cond_def) // lookahead token appears because list(system_cond_def) can begin with KEYWORD
+       . 
+
+** In state 201, looking ahead at KEYWORD, shifting is permitted
+** because of the following sub-derivation:
+
+SYMBOL list(system_var_dec) list(system_cond_def) 
+       system_var_dec list(system_var_dec) 
+       . KEYWORD OPEN list(sorted_var) CLOSE 

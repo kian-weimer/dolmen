@@ -20,11 +20,15 @@ end
 module type Statement = sig
   include Dolmen_smtlib2_v6_script.Statement
 
-  val sys_def   : ?loc:location -> id -> term list -> term list -> term -> term -> t
-  (** Defines a new function. [fun_def f args ret body] is such that
-      applications of [f] are equal to [body] (module substitution of the arguments),
-      which should be of type [ret]. *)
+  val sys_def : ?loc:location -> id -> (string * term list) list -> (id * id * term list) list -> (string * term ) list -> t
+  (** TODO  *)
     
+  val sys_check : ?loc:location ->
+    id ->
+    (string * term list) list ->
+    (string * (id * term)) list -> (id * term list) list -> t
+  (** TODO  *)
+
 end
 (** implementation requirement for smtlib statements. *)
 

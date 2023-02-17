@@ -69,6 +69,7 @@ reserved:
   | DEFINE_FUN_REC { "define-fun-rec" }
   | DEFINE_FUNS_REC { "define-funs-rec" }
   | DEFINE_SYS { "define-system" }
+  | CHECK_SYS { "check-system" }
   | DEFINE_SORT { "define-sort" }
   | ECHO { "echo" }
   | EXIT { "exit" }
@@ -88,6 +89,16 @@ reserved:
   | SET_INFO { "set-info" }
   | SET_LOGIC { "set-logic" }
   | SET_OPTION { "set-option" }
+  | SYS_INPUT { ":input" }
+  | SYS_OUTPUT { ":output" }
+  | SYS_LOCAL { ":local" }
+  | SYS_SUBSYS { ":subsys" }
+  | SYS_INIT { ":init" }
+  | SYS_TRANS { ":trans" }
+  | SYS_INV { ":inv" }
+  | CHECK_REACH { ":reachable" }
+  | CHECK_QUERY { ":query" }
+  | CHECK_QUERIES { ":queries" }
 ;
 
 s_expr:
@@ -321,9 +332,64 @@ function_def:
   | s=SYMBOL OPEN args=sorted_var* CLOSE ret=sort body=term
     { I.(mk term s), [], args, ret, body }
 
+system_var_dec:
+  | SYS_INPUT OPEN args=sorted_var* CLOSE
+  { ":input", args }
+  | SYS_OUTPUT OPEN args=sorted_var* CLOSE
+  { ":output", args }
+  | SYS_LOCAL OPEN args=sorted_var* CLOSE
+  { ":local", args }
+
+system_cond_def:
+  | SYS_INIT body=term
+  { ":init", body }
+  | SYS_TRANS body=term
+  { ":trans", body }
+  | SYS_INV body=term
+  { ":inv", body }
+  // TODO HANDLE EMPTY BODIES
+
+system_subsys_dec:
+  | SYS_SUBSYS OPEN local_name=SYMBOL OPEN sub_name=SYMBOL args=pattern_symbol* CLOSE CLOSE
+  
+  { I.(mk term local_name), I.(mk term sub_name), args }
+  | SYS_SUBSYS OPEN local_name=SYMBOL sub_name=SYMBOL CLOSE
+  { I.(mk term local_name), I.(mk term sub_name), [] }
+
+subs_and_conds:
+  | sub=system_subsys_dec others=subs_and_conds
+    {let subs, conds = others in
+     sub::subs, conds}
+  | cond=system_cond_def others=subs_and_conds
+    {let subs, conds = others in
+     subs, cond::conds}
+  | sub=system_subsys_dec
+    {[sub], []}
+  | cond=system_cond_def
+    {[], [cond]}
+
 system_def:
-  | s=SYMBOL OPEN args=sorted_var* CLOSE ret=sort body=term
-    { I.(mk term s), [], args, ret, body }
+  | s=SYMBOL args=system_var_dec* sc=subs_and_conds
+    { let subs, conds = sc in
+    I.(mk term s), args, subs, conds}
+
+formula:
+  | CHECK_REACH OPEN s=SYMBOL body=term CLOSE
+  { ":reachable", (I.(mk term s), body) }
+
+query_base:
+  | OPEN s=SYMBOL OPEN args=pattern_symbol* CLOSE CLOSE
+  {I.(mk term s), args}
+
+query:
+  | CHECK_QUERY query=query_base
+  { [query] }
+  | CHECK_QUERIES OPEN queries=query_base* CLOSE
+  { queries }
+
+system_check:
+  | s=SYMBOL args=system_var_dec* formulas=formula* queries=query*
+    { I.(mk term s), args, formulas, List.flatten queries}
 
 /* Additional rule for prop_literals symbols, to have lighter
    semantic actions in prop_literal reductions. */
@@ -413,9 +479,13 @@ command:
       let loc = L.mk_pos $startpos $endpos in
       S.funs_def_rec ~loc res }
   | OPEN DEFINE_SYS f=system_def CLOSE
-    { let id, vars, args, ret, body = f in
+    { let id, vars, subs, conds = f in
       let loc = L.mk_pos $startpos $endpos in
-      S.sys_def ~loc id vars args ret body }
+      S.sys_def ~loc id vars subs conds }
+  | OPEN CHECK_SYS f=system_check CLOSE
+  { let id, vars, formulas, queries = f in
+    let loc = L.mk_pos $startpos $endpos in
+    S.sys_check ~loc id vars formulas queries }
   | OPEN DEFINE_SORT s=SYMBOL OPEN args=SYMBOL* CLOSE ty=sort CLOSE
     { let id = I.(mk sort s) in
       let l = List.map I.(mk sort) args in
