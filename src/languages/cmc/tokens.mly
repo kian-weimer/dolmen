@@ -43,6 +43,16 @@
        SET_INFO
        SET_LOGIC
        SET_OPTION
-
+       SYS_INPUT
+       SYS_OUTPUT
+       SYS_LOCAL
+       SYS_SUBSYS
+       SYS_INIT
+       SYS_TRANS
+       SYS_INV
+       CHECK_SYS
+       CHECK_REACH
+       CHECK_QUERY
+       CHECK_QUERIES
 %%
 

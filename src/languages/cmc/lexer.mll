@@ -51,6 +51,7 @@
     | DEFINE_FUN_REC -> reserved_descr "define-fun-rec"
     | DEFINE_FUNS_REC -> reserved_descr "define-funs-rec"
     | DEFINE_SYS -> reserved_descr "define-system"
+    | CHECK_SYS -> reserved_descr "check-system"
     | DEFINE_SORT -> reserved_descr "define-sort"
     | ECHO -> reserved_descr "echo"
     | EXIT -> reserved_descr "exit"
@@ -70,6 +71,16 @@
     | SET_INFO -> reserved_descr "set-info"
     | SET_LOGIC -> reserved_descr "set-logic"
     | SET_OPTION -> reserved_descr "set-option"
+    | SYS_INPUT -> reserved_descr ":input"
+    | SYS_OUTPUT -> reserved_descr ":output"
+    | SYS_LOCAL -> reserved_descr ":local"
+    | SYS_SUBSYS -> reserved_descr ":subsys"
+    | SYS_INIT -> reserved_descr ":init"
+    | SYS_TRANS -> reserved_descr ":trans"
+    | SYS_INV -> reserved_descr ":inv"
+    | CHECK_REACH -> reserved_descr ":reachable"
+    | CHECK_QUERY -> reserved_descr ":query"
+    | CHECK_QUERIES -> reserved_descr ":queries"
 
   (* Token parsing *)
 
@@ -108,6 +119,7 @@
     "define-fun-rec", DEFINE_FUN_REC;
     "define-funs-rec", DEFINE_FUNS_REC;
     "define-system", DEFINE_SYS;
+    "check-system", CHECK_SYS;
     "define-sort", DEFINE_SORT;
     "echo", ECHO;
     "exit", EXIT;
@@ -183,6 +195,17 @@ rule token newline = parse
   | hexadecimal as s    { HEX s }
   | binary as s         { BIN s }
   | '"'                 { string newline (Buffer.create 42) lexbuf }
+  | ":input"            { SYS_INPUT }
+  | ":output"           { SYS_OUTPUT }
+  | ":local"            { SYS_LOCAL }
+  | ":subsys"           { SYS_SUBSYS }
+  | ":init"             { SYS_INIT }
+  | ":trans"            { SYS_TRANS }
+  | ":inv"              { SYS_INV }
+  | ":reachable"        { CHECK_REACH }
+  | ":query"            { CHECK_QUERY }
+  | ":queries"          { CHECK_QUERIES }
+
   | keyword as s        { KEYWORD s }
   | simple_symbol as s
   | '|' (quoted_symbol_char* as s) '|'
