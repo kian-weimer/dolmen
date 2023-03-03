@@ -68,6 +68,7 @@ type def = {
 
 type sys_def = {
   id     : Id.t;
+  loc    : location;
   input  : term list option;
   output : term list option;
   local  : term list option;
@@ -230,4 +231,7 @@ val print_group :
   (Format.formatter -> 'a -> unit) ->
   Format.formatter -> 'a group -> unit
 (* Printer for groups. *)
+
+val print_def_sys : Format.formatter -> sys_def -> unit
+(* TODO *)
 

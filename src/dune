@@ -10,6 +10,7 @@
     ; Dolmen languages
     dolmen_ae dolmen_dimacs dolmen_icnf
     dolmen_tptp dolmen_smtlib2 dolmen_zf
+    dolmen_cmc
     ; Dolmen classes
     dolmen_class
   )

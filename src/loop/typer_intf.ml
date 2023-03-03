@@ -52,6 +52,22 @@ module type Typer = sig
      | `Term_def of Dolmen.Std.Id.t * term_cst * ty_var list * term_var list * term
     ] list
 
+  val sys_def :
+    state ->
+      input:input ->
+      Dolmen_std.Loc.t ->
+      ?attrs:Dolmen_std.Term.t list ->
+      Dolmen_std.Statement.sys_def ->
+      state * [> `Sys_def of Dolmen.Std.Id.t * term_cst * term_var list * term_var list * term_var list]
+
+  val check_sys :
+    state ->
+      input:input ->
+      Dolmen_std.Loc.t ->
+      ?attrs:Dolmen_std.Term.t list ->
+      Dolmen_std.Statement.sys_check ->
+      state * [> `Sys_check]
+
   val decls :
     state -> input:input -> ?loc:Dolmen.Std.Loc.t ->
     ?attrs:Dolmen.Std.Term.t list -> Dolmen.Std.Statement.decls ->
@@ -189,6 +205,12 @@ module type S = sig
   ]
   (** A list of definitions *)
 
+  type sys = [
+    (* TODO: change the value once known *)
+    | `Sys_def of Dolmen.Std.Id.t * term_cst * term_var list * term_var list * term_var list (* Do we need a body or return type? I think no... *)
+    | `Sys_check
+  ]
+
   type assume = [
     | `Hyp of formula
     | `Goal of formula
@@ -236,7 +258,7 @@ module type S = sig
   ]
   (** Exit statement *)
 
-  type typechecked = [ defs | decls | assume | solve | get_info | set_info | stack_control | exit ]
+  type typechecked = [ sys | defs | decls | assume | solve | get_info | set_info | stack_control | exit ]
   (** The type of statements after typechecking *)
 
   val print : Format.formatter -> typechecked stmt -> unit

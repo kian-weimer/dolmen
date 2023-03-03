@@ -108,6 +108,8 @@ let print_fragment (type a) fmt (env, fragment : T.env * a T.fragment) =
     Dolmen.Std.Statement.print_group Dolmen.Std.Statement.print_def fmt d
   | T.Decls d ->
     Dolmen.Std.Statement.print_group Dolmen.Std.Statement.print_decl fmt d
+  | T.SysDef d ->
+    Dolmen.Std.Statement.print_def_sys fmt d
   | T.Located _ ->
     let full = T.fragment_loc env fragment in
     let loc = Dolmen.Std.Loc.full_loc full in
@@ -147,6 +149,9 @@ let print_reason ?(already=false) fmt r =
   | Declared (file, d) ->
     Format.fprintf fmt "was%a declared at %a"
       pp_already () Dolmen.Std.Loc.fmt_pos (Dolmen.Std.Loc.loc file (decl_loc d))
+  | SysDefined (file, s) ->
+    Format.fprintf fmt "was%a defined as a system at %a"
+      pp_already () Dolmen.Std.Loc.fmt_pos (Dolmen.Std.Loc.loc file s.loc)
   | Implicit_in_def (file, d) ->
     Format.fprintf fmt "was%a implicitly introduced in the definition at %a"
       pp_already () Dolmen.Std.Loc.fmt_pos (Dolmen.Std.Loc.loc file d.loc)
@@ -1682,8 +1687,8 @@ module Typer(State : State.S) = struct
       )
 
 
-  (* Definitions *)
-  (* ************************************************************************ *)
+(* Definitions *)
+(* ************************************************************************ *)
 
   let defs ~mode st ~input ?loc ?attrs d =
     typing_wrap ?attrs ?loc ~input st ~f:(fun env ->
@@ -1698,8 +1703,27 @@ module Typer(State : State.S) = struct
           ) l
       )
 
-  (* Wrappers around the Type-checking module *)
-  (* ************************************************************************ *)
+
+(* CMC Only System Definitions and Checks *)
+(* ************************************************************************ *)
+
+  (* let is_cmc_language (st : State.t) =
+  match (State.get ty_state st).logic with
+  | Smtlib2 logic -> logic.features.free_functions
+  | Auto -> true *)
+
+  let sys_def st ~input loc ?attrs d =
+    typing_wrap ?attrs ?loc:(Some loc) ~input st ~f:(fun env ->
+        T.sys_def env d
+    )
+
+  let check_sys st ~input loc ?attrs d =
+    typing_wrap ?attrs ?loc:(Some loc) ~input st ~f:(fun env ->
+        T.check_sys env d
+    )
+
+(* Wrappers around the Type-checking module *)
+(* ************************************************************************ *)
 
   let terms st ~input ?loc ?attrs = function
     | [] -> st, []
@@ -1779,6 +1803,13 @@ module Make
     | `Defs of def list
   ]
 
+  type sys = [
+    (* TODO: change the value once known *)
+                  (* id, inputs, outputs, locals *)
+    | `Sys_def of Dolmen.Std.Id.t * Expr.term_cst * Expr.term_var list * Expr.term_var list * Expr.term_var list (* Do we need a body or return type? I think no... *)
+    | `Sys_check
+  ]
+
   type decl = [
     | `Type_decl of Expr.ty_cst
     | `Term_decl of Expr.term_cst
@@ -1830,7 +1861,7 @@ module Make
   ]
 
   (* Agregate types *)
-  type typechecked = [ defs | decls | assume | solve | get_info | set_info | stack_control | exit ]
+  type typechecked = [ sys | defs | decls | assume | solve | get_info | set_info | stack_control | exit ]
 
   (* Simple constructor *)
   (* let tr implicit contents = { implicit; contents; } *)
@@ -2016,7 +2047,15 @@ module Make
           st, `Continue (res)
 
         (* TODO ... *)
-        | { S.descr = S.Def_sys; _ } -> st, `Done ()
+        | { S.descr = S.Def_sys s ; _ } -> 
+          let st, l = Typer.sys_def st ~input c.S.loc ~attrs:c.S.attrs s in
+          let res : typechecked stmt = simple (decl_id c) c.S.loc l in
+          st, `Continue (res)
+        
+        | { S.descr = S.Chk_sys s ; _ } ->
+          let st, l = Typer.check_sys st ~input c.S.loc ~attrs:c.S.attrs s in
+          let res : typechecked stmt = simple (decl_id c) c.S.loc l in
+          st, `Continue (res)
 
         (* Smtlib's proof/model instructions *)
         | { S.descr = S.Get_proof; _ } ->

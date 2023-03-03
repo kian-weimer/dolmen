@@ -207,6 +207,7 @@ module Make
     | Inferred of Loc.file * Ast.t
     | Defined of Loc.file * Stmt.def
     | Declared of Loc.file * Stmt.decl
+    | SysDefined of Loc.file * Stmt.sys_def
     | Implicit_in_def of Loc.file * Stmt.def
     | Implicit_in_decl of Loc.file * Stmt.decl
     | Implicit_in_term of Loc.file * Ast.t
@@ -268,6 +269,7 @@ module Make
     | Defs : Stmt.defs -> Stmt.defs fragment
     | Decl : Stmt.decl -> Stmt.decl fragment
     | Decls : Stmt.decls -> Stmt.decls fragment
+    | SysDef : Stmt.sys_def -> Stmt.sys_def fragment
     | Located : Loc.t -> Loc.t fragment
 
   let decl_loc d =
@@ -372,10 +374,14 @@ module Make
 
     mutable csts : cst M.t;
     (* association between dolmen ids and types/terms constants. *)
+    mutable systems: cst M.t;
+    (* defined systems *)
     mutable ttype_locs : reason R.t;
     (* stores reasons for typing of type constructors *)
     mutable const_locs : reason S.t;
     (* stores reasons for typing of constants *)
+    mutable system_locs : reason S.t;
+    (* stores reasons for typing of system_locs *)
     mutable cstrs_locs : reason U.t;
     (* stores reasons for typing adt constructors *)
     mutable dstrs_locs : reason S.t;
@@ -493,6 +499,7 @@ module Make
       | Decl d -> decl_loc d
       | Decls { contents = []; _ } -> Loc.no_loc
       | Decls { contents = d :: _; _ } -> decl_loc d
+      | SysDef s -> s.loc
       | Located l -> l
     in
     { file = env.file;
@@ -725,8 +732,10 @@ module Make
 
   let new_state () = {
     csts = M.empty;
+    systems = M.empty;
     ttype_locs = R.empty;
     const_locs = S.empty;
+    system_locs = S.empty;
     cstrs_locs = U.empty;
     dstrs_locs = S.empty;
     field_locs = V.empty;
@@ -735,9 +744,11 @@ module Make
 
   let copy_state st = {
     csts = st.csts;
+    systems = st.systems;
     custom = st.custom;
     ttype_locs = st.ttype_locs;
     const_locs = st.const_locs;
+    system_locs = st.const_locs;
     cstrs_locs = st.cstrs_locs;
     dstrs_locs = st.dstrs_locs;
     field_locs = st.field_locs;
@@ -1071,7 +1082,7 @@ module Make
     | Bound (_, t) | Inferred (_, t) ->
       _warn env (Ast t) (Unused_type_variable (kind, v))
     (* variables should not be declare-able nor builtin *)
-    | Builtin | Reserved | Declared _ | Defined _
+    | Builtin | Reserved | Declared _ | Defined _ | SysDefined _
     | Implicit_in_def _ | Implicit_in_decl _ | Implicit_in_term _ ->
       assert false
 
@@ -1085,7 +1096,7 @@ module Make
       _warn env (Ast t) (Unused_term_variable (kind, v))
     (* variables should not be declare-able nor builtin,
        and we do not use any term wildcards. *)
-    | Builtin | Reserved | Declared _ | Defined _
+    | Builtin | Reserved | Declared _ | Defined _ | SysDefined _
     | Implicit_in_def _ | Implicit_in_decl _ | Implicit_in_term _ ->
       assert false
 
@@ -2418,9 +2429,197 @@ module Make
         ) d.contents
     end
 
+  (* CMC Only System Definitions and Checks *)
+  (* ************************************************************************ *)
+  (* Const declarations *)
+  let add_system env fragment id reason (v : cst) =
+    begin match find_bound env id with
+      | `Not_found -> ()
+      | `Builtin `Infer _ -> () (* inferred builtins are meant to be shadowed/replaced *)
+      | #bound as old -> _shadow env fragment id old reason v
+    end;
+    env.st.systems <- M.add id v env.st.systems
+
+  let decl_sys env fg id c reason =
+    add_system env fg id reason (`Term_cst c);
+    env.st.const_locs <- S.add c reason env.st.const_locs
+  
+  let op_list_to_list l =
+    match l with
+      | Some l -> l
+      | None -> []
+
+  let op_funct_app f o = 
+    match o with 
+      | Some o -> Some (f o)
+      | None -> None
+
+  let parse_opt_prop env prop = 
+    match op_funct_app (parse_expr env) prop with 
+      (* TODO: Add proper errors rather than assertions *)
+      | Some (Term body) ->
+        assert ((T.ty body) == Ty.prop)
+      | _ -> assert false
+
+  let parse_sys env (d: Stmt.sys_def) = 
+    parse_opt_prop env d.init ; 
+    parse_opt_prop env d.trans ; 
+    parse_opt_prop env d.inv
+
+  let parse_cmc_sig env input output local =
+    let env, input = parse_def_params env (op_list_to_list input) in
+    let env, output = parse_def_params env (op_list_to_list output) in
+    let env, local = parse_def_params env (op_list_to_list local) in
+
+    env, input, output, local
+    
+  let mk_term_cst env name ty =
+    T.Const.mk (cst_path env name) ty
+
+  let create_id_for_sig env input output local (s: Stmt.sys_def) =
+    let input_tys  = List.map (fun p -> T.Var.ty p) input  in
+    let output_tys = List.map (fun p -> T.Var.ty p) output in
+    let local_tys  = List.map (fun p -> T.Var.ty p) local  in
+    
+    (* TODO Change the last element in the type to a 'unit' type *)
+    let ty = Ty.arrow input_tys (Ty.arrow output_tys  (Ty.arrow local_tys Ty.prop) ) in
+    
+    let f = mk_term_cst env (Id.name s.id) ty in
+    
+    (* Create a new thing that is not a term const? *)
+    decl_sys env (SysDef s) s.id f (SysDefined (env.file, s));
+    s.id, f(* `Term (s.id, f) *)
+
+  let id_for_sig env input output local (s: Stmt.sys_def) =
+    create_id_for_sig env input output local s
+    
+  let finalize_sys id f env input output local = 
+    let _ = env in (* TODO determine if commented code below is needed
+      Was causing errors and its purpose is unknown. *)
+    (* List.iter (check_used_term_var ~kind:`Function_param env) input;
+    List.iter (check_used_term_var ~kind:`Function_param env) output;
+    List.iter (check_used_term_var ~kind:`Function_param env) local; *)
+
+    `Sys_def (id, f, input, output, local)
+
+  let sys_def env (d : Stmt.sys_def) =
+    let env = split_env_for_def env in
+    let ssig_env, input , output , local = parse_cmc_sig env d.input d.output d.local in
+    parse_sys ssig_env d ;
+
+    (* TODO *)
+    let id, f = id_for_sig ssig_env input output local d in
+
+    (* Finalize Def -- What do these do? *)
+
+    (* let def = parse_def ssig t in
+    let ssig = close_wildcards_in_sig ssig t in
+    let id = id_for_def ~freshen:false ~defs:d ~mode tags ssig t in *)
+    finalize_sys id f env input output local
+
+    (* ( id, input, output, local ) I wanted to do `Sys_def ( d.id, [], [] ), but ocaml doesn't like it *)
+
   (* High-level parsing function *)
   (* ************************************************************************ *)
+  let split_fo_args2 _ n_ty n_t args = (* from split_fo_args *)
+    let n_args = List.length args in
+    if n_args = n_ty + n_t then
+      `Ok (Misc.Lists.take_drop n_ty args)
+    else
+      `Bad_arity ([n_ty + n_t], n_args)
+     
 
+  let parse_sys_app_symbol env s args_asts = (*from parse_app_term_cst*)
+    let n_ty, n_t = T.Const.arity s in
+      let ty_args, t_l =
+        match split_fo_args2 env n_ty n_t args_asts with
+        | `Ok (l, l') ->
+          let ty_args = List.map (parse_ty env) l in
+          ty_args, l'
+        | `Fixed (l, l') -> l, l'
+        | `Bad_arity _ ->
+          assert false (*TODO better error*)(* _bad_term_arity env f expected actual ast *)
+      in
+      let t_args = List.map (parse_term env) t_l in
+
+      (* TODO Do better here once we change the type of a sys def *)
+      assert (Ty.equal (T.ty (T.apply_cst s ty_args t_args))  (Ty.prop))
+
+  let find_system env sid : [cst | not_found] = 
+    match M.find_opt sid env.st.systems with
+    | Some res -> (res :> [cst | not_found])
+    | None -> `Not_found
+
+  let parse_sys_app env sid input output local = 
+    let sys = match find_system env sid with
+      | #cst as res -> (res :> [ bound | not_found ])
+      | `Not_found ->
+        (find_builtin env sid :> [ bound | not_found ])
+    in
+    Format.printf "ID: %a" Id.print sid ;
+    match sys with 
+    | `Term_cst s -> parse_sys_app_symbol env s (input @ output @ local)
+    | _ -> assert false (* TODO ADD PROPER ERROR *)
+
+  
+  let parse_reachability_statement env prop_map r = 
+    let id, (body: Ast.t) = r in
+    match (parse_expr env body) with
+      | Term t -> 
+        let reachability_type = T.ty t in  
+        (* let _ = mk_term_var env (Id.name id) reachability_type in *)
+        
+        (* TODO make this a proper error *)
+        assert (Ty.equal reachability_type Ty.prop) ;
+
+        (* let env = add_term_var env id term_var body in *)
+        id :: prop_map (* could make this a map for quicker lookups *)
+        
+        | _ -> assert false (* TODO add real error here *)
+
+  let parse_properties env (d: Stmt.sys_check) = 
+    (* Parse reach bodies to verify that they are boolean *)
+    List.fold_left (parse_reachability_statement env) [] d.reachable 
+    (* Add new variables to the environment representing these boolean properties *)
+  
+  let parse_queries prop_map (d: Stmt.sys_check) = 
+    let check_query queries (id, props) = 
+      (* TODO make a better error message and possibly use a map *)
+      assert (not (List.mem id queries)); 
+
+      (* TODO make a better error message *)
+      (* possibly prevent duplicate uses of props *)
+       
+      (* TODO add better error messages *)
+      (* possibly prevent duplicate uses of props *)
+      List.iter (fun prop -> match prop with 
+        | { Ast.term = Ast.Symbol s; _ } ->
+          assert (not ((List.find_opt (Id.equal s) prop_map) = None))
+        | _ -> assert false ) props ;
+
+      id :: queries in
+    List.fold_left check_query [] d.queries
+  
+  let check_sys env (c : Stmt.sys_check) = 
+    let env = split_env_for_def env in
+    let ssig_env, _ , _ , _ = parse_cmc_sig env c.input c.output c.local in
+    
+    (* Verify that a system exists with the same variables *)
+    parse_sys_app 
+      ssig_env c.id 
+      (op_list_to_list c.input) 
+      (op_list_to_list c.output)
+      (op_list_to_list c.local);
+    
+    (* Verify the reachability predicate assignments are valid. Add to env *)
+    let prop_map = parse_properties ssig_env c in
+
+    (* Type check the queries. Try to treat them like function decls? (where args must be bools)  *)
+    let _ = parse_queries prop_map c in
+
+    (* No need to add the check-system to the environment?  *)
+    `Sys_check
+  
   let parse env ast =
     let res = parse_prop env ast in
     let _env, res = finalize_wildcards_prop (`Term ast) env ast res in

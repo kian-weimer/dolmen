@@ -43,6 +43,7 @@ type def = {
 
 type sys_def = {
   id     : Id.t;
+  loc : location;
   input  : term list option;
   output : term list option;
   local  : term list option;
@@ -274,7 +275,7 @@ let print_attrs fmt attrs =
   | Some [] -> Format.fprintf fmt "()"
   | Some attrs ->  Format.fprintf fmt "@[<hov 2>%a@]" (fun fmt attrs -> List.iter (Format.fprintf fmt "%a " Term.print) attrs) attrs 
   
-let print_def_sys fmt ({ id; input; output; local; init; trans; inv; subs;} : sys_def) =
+let print_def_sys fmt ({ id; loc = _; input; output; local; init; trans; inv; subs;} : sys_def) =
   let print_sub fmt (local_name, sys_name, vars) = 
     Format.fprintf fmt "@[<hov 2>subsys: ( %a : %a ) :: ( %a ) @]"
       Id.print local_name
@@ -462,7 +463,7 @@ let group_decls ?loc ?attrs ~recursive l =
 let mk_defs ?loc ?attrs ~recursive defs =
   mk ?loc ?attrs (Defs { recursive; contents = defs; })
 
-let mk_def_sys ?loc id vars subs conds =
+let mk_def_sys loc id vars subs conds =
   let input = List.assoc_opt ":input" vars in
   let output = List.assoc_opt ":output" vars in
   let local = List.assoc_opt ":local" vars in
@@ -470,7 +471,7 @@ let mk_def_sys ?loc id vars subs conds =
   let trans = List.assoc_opt ":trans" conds in
   let inv = List.assoc_opt ":inv" conds in
   
-  mk ?loc (Def_sys {id; input; output; local; init; trans; inv; subs} )
+  mk ?loc:(Some loc) (Def_sys {id; loc; input; output; local; init; trans; inv; subs} )
 
 let mk_check_sys ?loc id vars formulas queries =
   let assoc_many key = List.filter_map (fun (ident, value) -> if ident = key then Some value else None ) in
@@ -598,8 +599,8 @@ let fun_def_rec ?loc id vars params ret_ty body =
     def ?loc id ~vars ~params ret_ty body
   ]
 
-let sys_def ?loc id vars subs conds = 
-  mk_def_sys ?loc id vars subs conds
+let sys_def loc id vars subs conds = 
+  mk_def_sys loc id vars subs conds
 
 let sys_check ?loc id vars formulas queries = 
   let _ = id, vars, formulas, queries in

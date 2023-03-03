@@ -243,6 +243,8 @@ module Make
     in
     { contents; loc; file; }
 
+  
+
   let record_defs st ~loc ~(file : _ file) typed_defs =
     List.fold_left (fun st def ->
         match def with
@@ -381,6 +383,9 @@ module Make
         | `Defs defs ->
           let new_defs = pack_abstract_defs ~file ~loc defs in
           State.set check_state { t with defs = new_defs :: t.defs; } st
+        | `Sys_def _ ->
+           st
+        | `Sys_check -> st
         | `Hyp contents ->
           let assertion = { file; loc; contents; } in
           State.set check_state { t with hyps = assertion :: t.hyps; } st
