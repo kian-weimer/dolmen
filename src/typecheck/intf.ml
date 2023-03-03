@@ -155,6 +155,7 @@ module type Formulas = sig
     | Inferred of Dolmen.Std.Loc.file * Dolmen.Std.Term.t
     | Defined of Dolmen.Std.Loc.file * Dolmen.Std.Statement.def
     | Declared of Dolmen.Std.Loc.file * Dolmen.Std.Statement.decl
+    | SysDefined of Dolmen.Std.Loc.file * Dolmen.Std.Statement.sys_def
     | Implicit_in_def of Dolmen.Std.Loc.file * Dolmen.Std.Statement.def
     | Implicit_in_decl of Dolmen.Std.Loc.file * Dolmen.Std.Statement.decl
     | Implicit_in_term of Dolmen.Std.Loc.file * Dolmen.Std.Term.t
@@ -207,6 +208,7 @@ module type Formulas = sig
     | Defs : Dolmen.Std.Statement.defs -> Dolmen.Std.Statement.defs fragment
     | Decl : Dolmen.Std.Statement.decl -> Dolmen.Std.Statement.decl fragment
     | Decls : Dolmen.Std.Statement.decls -> Dolmen.Std.Statement.decls fragment
+    | SysDef : Dolmen.Std.Statement.sys_def -> Dolmen.Std.Statement.sys_def fragment
     | Located : Dolmen.Std.Loc.t -> Dolmen.Std.Loc.t fragment (**)
   (** Fragments of input that represent the sources of warnings/errors *)
 
@@ -585,6 +587,15 @@ module type Formulas = sig
       | `Term_def of Dolmen.Std.Id.t * term_cst * ty_var list * term_var list * term
     ] list
   (** Parse a definition *)
+
+  val sys_def : 
+  env -> Dolmen.Std.Statement.sys_def -> [> `Sys_def of Dolmen.Std.Id.t * term_cst * term_var list * term_var list * term_var list
+         ]
+  (* TODO *)
+
+  val check_sys : 
+  env -> Dolmen.Std.Statement.sys_check -> [> `Sys_check ]
+  (* TODO *)
 
   val parse : term typer
   (** Parse a formula *)

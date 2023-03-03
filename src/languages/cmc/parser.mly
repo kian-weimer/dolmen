@@ -481,7 +481,7 @@ command:
   | OPEN DEFINE_SYS f=system_def CLOSE
     { let id, vars, subs, conds = f in
       let loc = L.mk_pos $startpos $endpos in
-      S.sys_def ~loc id vars subs conds }
+      S.sys_def loc id vars subs conds }
   | OPEN CHECK_SYS f=system_check CLOSE
   { let id, vars, formulas, queries = f in
     let loc = L.mk_pos $startpos $endpos in

@@ -538,7 +538,7 @@ module Make
         let file = State.get State.logic_file st in
         let loc = Dolmen.Std.Loc.{ file = file.loc; loc = c.loc; } in
         match c.contents with
-        | #Typer_Pipe.exit
+          | #Typer_Pipe.exit
           | #Typer_Pipe.decls
           | #Typer_Pipe.get_info
           | #Typer_Pipe.set_info -> st
@@ -546,6 +546,10 @@ module Make
             State.error ~file ~loc st assertion_stack_not_supported ()
           | `Defs defs ->
             check_defs ~file ~loc st defs
+          | `Sys_def _ ->
+            st
+          | `Sys_check -> 
+            st
           | `Hyp contents ->
             check_hyps ~file ~loc st contents
           | `Goal contents ->

@@ -205,7 +205,7 @@ module type Logic = sig
       i.e f is a function symbol with arguments [args], and which returns the value
       [body] which is of type [ret]. *)
 
-  val sys_def     : ?loc:location -> id -> (string * term list) list -> (id * id * term list) list -> (string * term ) list -> t
+  val sys_def     : location -> id -> (string * term list) list -> (id * id * term list) list -> (string * term ) list -> t
   (* TODO *)
 
   val sys_check : ?loc:location ->

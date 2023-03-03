@@ -20,7 +20,7 @@ end
 module type Statement = sig
   include Dolmen_smtlib2_v6_script.Statement
 
-  val sys_def : ?loc:location -> id -> (string * term list) list -> (id * id * term list) list -> (string * term ) list -> t
+  val sys_def : location -> id -> (string * term list) list -> (id * id * term list) list -> (string * term ) list -> t
   (** TODO  *)
     
   val sys_check : ?loc:location ->
