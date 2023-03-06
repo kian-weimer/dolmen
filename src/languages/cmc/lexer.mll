@@ -172,7 +172,8 @@ let binary = "#b" bin+
 let ss_first_char =
   letter | ['+' '-' '/' '*' '=' '%' '?' '!' '.' '$' '_' '~' '&' '^' '<' '>' '@']
 let ss_char = ss_first_char | digit
-let simple_symbol = ss_first_char ss_char*
+let ss_last_char = ss_first_char | digit | [''']
+let simple_symbol = ss_first_char ss_char* ss_last_char?
 
 let quoted_symbol_char = (white_space_or_printable # ['|' '\\'])
 

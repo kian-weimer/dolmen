@@ -2461,17 +2461,36 @@ module Make
         assert ((T.ty body) == Ty.prop)
       | _ -> assert false
 
-  let parse_sys env (d: Stmt.sys_def) = 
+  let parse_sys env primed_env (d: Stmt.sys_def) = 
     parse_opt_prop env d.init ; 
-    parse_opt_prop env d.trans ; 
+    parse_opt_prop primed_env d.trans ; 
     parse_opt_prop env d.inv
 
-  let parse_cmc_sig env input output local =
-    let env, input = parse_def_params env (op_list_to_list input) in
-    let env, output = parse_def_params env (op_list_to_list output) in
-    let env, local = parse_def_params env (op_list_to_list local) in
+  let parse_primed_params env params =
+    let rec aux env acc = function
+      | [] -> env, List.rev acc
+      | p :: r ->
+        let id, v, ast = parse_typed_var_in_binding_pos env p in
+        let primed_id =  match (Id.name id) with
+        | Simple name ->
+          Id.create (Id.ns id) (Dolmen_std.Name.simple (name ^ "'") )
+        | _ -> assert false in
+        let env = add_term_var env primed_id v ast in
+        aux env (v :: acc) r
+    in
+    aux env [] params
 
-    env, input, output, local
+  let parse_cmc_sig env input output local =
+    let env, input_parsed  = parse_def_params env (op_list_to_list input) in
+    let env, output_parsed = parse_def_params env (op_list_to_list output) in
+    let env, local_parsed  = parse_def_params env (op_list_to_list local) in
+    let primed_env = split_env_for_def env in
+    let primed_env, _ = parse_primed_params primed_env (op_list_to_list input) in
+    let primed_env, _ = parse_primed_params primed_env (op_list_to_list output) in
+    let primed_env, _ = parse_primed_params primed_env (op_list_to_list local) in
+
+
+    env, primed_env, input_parsed, output_parsed, local_parsed
     
   let mk_term_cst env name ty =
     T.Const.mk (cst_path env name) ty
@@ -2504,8 +2523,8 @@ module Make
 
   let sys_def env (d : Stmt.sys_def) =
     let env = split_env_for_def env in
-    let ssig_env, input , output , local = parse_cmc_sig env d.input d.output d.local in
-    parse_sys ssig_env d ;
+    let ssig_env, ssig_primed_env, input , output , local = parse_cmc_sig env d.input d.output d.local in
+    parse_sys ssig_env ssig_primed_env d ;
 
     (* TODO *)
     let id, f = id_for_sig ssig_env input output local d in
@@ -2577,9 +2596,9 @@ module Make
         
         | _ -> assert false (* TODO add real error here *)
 
-  let parse_properties env (d: Stmt.sys_check) = 
+  let parse_properties _ primed_env (d: Stmt.sys_check) = 
     (* Parse reach bodies to verify that they are boolean *)
-    List.fold_left (parse_reachability_statement env) [] d.reachable 
+    List.fold_left (parse_reachability_statement primed_env) [] d.reachable 
     (* Add new variables to the environment representing these boolean properties *)
   
   let parse_queries prop_map (d: Stmt.sys_check) = 
@@ -2602,7 +2621,7 @@ module Make
   
   let check_sys env (c : Stmt.sys_check) = 
     let env = split_env_for_def env in
-    let ssig_env, _ , _ , _ = parse_cmc_sig env c.input c.output c.local in
+    let ssig_env, ssig_primed_env, _ , _ , _ = parse_cmc_sig env c.input c.output c.local in
     
     (* Verify that a system exists with the same variables *)
     parse_sys_app 
@@ -2612,7 +2631,9 @@ module Make
       (op_list_to_list c.local);
     
     (* Verify the reachability predicate assignments are valid. Add to env *)
-    let prop_map = parse_properties ssig_env c in
+    (* TODO We will need a third env eith only primed is once we add more than just reachability
+       properties. See the check-system definition on GitHub for clarification. *)
+    let prop_map = parse_properties ssig_env ssig_primed_env c in
 
     (* Type check the queries. Try to treat them like function decls? (where args must be bools)  *)
     let _ = parse_queries prop_map c in
