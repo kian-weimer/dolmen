@@ -2459,7 +2459,7 @@ module Make
       (* TODO: Add proper errors rather than assertions *)
       | Some (Term body) ->
         assert ((T.ty body) == Ty.prop)
-      | _ -> assert false
+      | _ -> () (* no body means valid typecheck*)
 
   let parse_sys env primed_env (d: Stmt.sys_def) = 
     parse_opt_prop env d.init ; 
