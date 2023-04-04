@@ -391,6 +391,14 @@ system_check:
   | s=SYMBOL args=system_var_dec* formulas=formula* queries=query*
     { I.(mk term s), args, formulas, List.flatten queries}
 
+enum_ident:
+  | s=SYMBOL
+    { I.(mk term s) }
+
+declare_enum: 
+  | enum=SYMBOL OPEN values=enum_ident+ CLOSE
+    {I.(mk term enum), values}
+
 /* Additional rule for prop_literals symbols, to have lighter
    semantic actions in prop_literal reductions. */
 prop_symbol:
@@ -482,6 +490,12 @@ command:
     { let id, vars, subs, conds = f in
       let loc = L.mk_pos $startpos $endpos in
       S.sys_def loc id vars subs conds }
+  | OPEN DECLARE_ENUM_SORT f=declare_enum CLOSE
+    {
+      let id, values = f in
+      let loc = L.mk_pos $startpos $endpos in
+      S.declare_enum_sort loc id values
+    }
   | OPEN CHECK_SYS f=system_check CLOSE
   { let id, vars, formulas, queries = f in
     let loc = L.mk_pos $startpos $endpos in

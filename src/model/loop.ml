@@ -386,6 +386,7 @@ module Make
         | `Sys_def _ ->
            st
         | `Sys_check -> st
+        | `Dec_enum_sort -> st
         | `Hyp contents ->
           let assertion = { file; loc; contents; } in
           State.set check_state { t with hyps = assertion :: t.hyps; } st

@@ -51,6 +51,7 @@
     | DEFINE_FUN_REC -> reserved_descr "define-fun-rec"
     | DEFINE_FUNS_REC -> reserved_descr "define-funs-rec"
     | DEFINE_SYS -> reserved_descr "define-system"
+    | DECLARE_ENUM_SORT -> reserved_descr "declare-enum-sort"
     | CHECK_SYS -> reserved_descr "check-system"
     | DEFINE_SORT -> reserved_descr "define-sort"
     | ECHO -> reserved_descr "echo"
@@ -119,6 +120,7 @@
     "define-fun-rec", DEFINE_FUN_REC;
     "define-funs-rec", DEFINE_FUNS_REC;
     "define-system", DEFINE_SYS;
+    "declare-enum-sort", DECLARE_ENUM_SORT;
     "check-system", CHECK_SYS;
     "define-sort", DEFINE_SORT;
     "echo", ECHO;
