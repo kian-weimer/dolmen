@@ -594,6 +594,10 @@ module type Formulas = sig
   env -> Dolmen.Std.Statement.sys_check -> [> `Sys_check ]
   (* TODO *)
 
+  val declare_enum_sort : 
+  env -> Dolmen.Std.Statement.enum_sort -> [> `Dec_enum_sort ]
+  (* TODO *)
+
   val parse : term typer
   (** Parse a formula *)
 

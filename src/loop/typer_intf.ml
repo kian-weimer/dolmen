@@ -67,6 +67,14 @@ module type Typer = sig
       ?attrs:Dolmen_std.Term.t list ->
       Dolmen_std.Statement.sys_check ->
       state * [> `Sys_check]
+  
+  val declare_enum_sort : 
+    state ->
+      input:input ->
+      Dolmen_std.Loc.t ->
+      ?attrs:Dolmen_std.Term.t list ->
+      Dolmen_std.Statement.enum_sort ->
+      state * [> `Dec_enum_sort]
 
   val decls :
     state -> input:input -> ?loc:Dolmen.Std.Loc.t ->

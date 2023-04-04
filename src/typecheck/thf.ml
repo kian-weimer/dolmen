@@ -2640,6 +2640,11 @@ module Make
 
     (* No need to add the check-system to the environment?  *)
     `Sys_check
+
+  let declare_enum_sort env (e : Stmt.enum_sort) = 
+    let _, _ = env, e in
+    (* TODO *)
+    `Dec_enum_sort
   
   let parse env ast =
     let res = parse_prop env ast in

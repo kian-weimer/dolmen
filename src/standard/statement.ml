@@ -623,6 +623,7 @@ let sys_check ?loc id vars formulas queries =
 
 let declare_enum_sort loc id values = 
   (* TODO *)
+  Format.printf "TODO: Add typechecking for declare-enum-sort CMC command!\n" ; 
   mk ?loc:(Some loc) (Dec_enum_sort {id; loc; values} )
 
 let pred_def ?loc id vars params body =
