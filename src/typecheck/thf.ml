@@ -2637,7 +2637,7 @@ module Make
       (op_list_to_list c.local);
     
     (* Verify the reachability predicate assignments are valid. Add to env *)
-    (* TODO We will need a third env eith only primed is once we add more than just reachability
+    (* TODO We will need a third env with only primed vars once we add more than just reachability
        properties. See the check-system definition on GitHub for clarification. *)
     let prop_map = parse_properties ssig_env ssig_primed_env c in
 

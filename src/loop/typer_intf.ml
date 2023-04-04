@@ -210,6 +210,7 @@ module type S = sig
     (* TODO: change the value once known *)
     | `Sys_def of Dolmen.Std.Id.t * term_cst * term_var list * term_var list * term_var list (* Do we need a body or return type? I think no... *)
     | `Sys_check
+    | `Dec_enum_sort
   ]
 
   type assume = [

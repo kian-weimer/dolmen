@@ -64,6 +64,12 @@ type sys_check = {
   queries   : (Id.t * term list) list;
 }
 
+type enum_sort = {
+  id      : Id.t;
+  loc : location;
+  values  : Id.t list;
+}
+
 type 'a group = {
   contents : 'a list;
   recursive : bool;
@@ -101,6 +107,7 @@ type descr =
 
   | Def_sys of sys_def
   | Chk_sys of sys_check
+  | Dec_enum_sort of enum_sort
 
   | Get_proof
   | Get_unsat_core
@@ -306,6 +313,13 @@ let print_def_sys fmt ({ id; loc = _; input; output; local; init; trans; inv; su
       print_attr inv
       print_subs subs
 
+let print_dec_enum fmt {id; loc=_; values} = 
+  Format.fprintf fmt "@[<hov 2>declare-enum-sort:@ %a =@ (@,%a@,)@]"
+  Id.print
+  id
+  (Misc.print_list ~print_sep:Format.fprintf ~sep:" " ~print:Id.print)
+  values
+
 let print_check_sys fmt ({id; input; output; local; reachable; queries}: sys_check) =
   let print_formula base_name fmt (name, term) = 
     Format.fprintf fmt "@,%s %a = %a;" base_name Id.print name Term.print term in
@@ -366,6 +380,7 @@ let rec print_descr fmt = function
   | Decls d -> print_group print_decl fmt d
 
   | Def_sys d -> print_def_sys fmt d
+  | Dec_enum_sort e -> print_dec_enum fmt e
   | Chk_sys d -> print_check_sys fmt d
 
   | Get_proof -> Format.fprintf fmt "get-proof"
@@ -612,6 +627,10 @@ let sys_def loc id vars subs conds =
 let sys_check ?loc id vars formulas queries = 
   let _ = id, vars, formulas, queries in
   mk_check_sys ?loc id vars formulas queries
+
+let declare_enum_sort loc id values = 
+  (* TODO *)
+  mk ?loc:(Some loc) (Dec_enum_sort {id; loc; values} )
 
 let funs_def_rec ?loc l =
   let contents = List.map (fun (id, vars, params, ret_ty, body) ->

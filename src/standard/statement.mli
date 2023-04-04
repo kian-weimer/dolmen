@@ -89,6 +89,13 @@ type sys_check = {
   reachable : (Id.t * term) list;
   queries   : (Id.t * term list) list;
 }
+
+type enum_sort = {
+  id      : Id.t;
+  loc     : location;
+  values  : Id.t list;
+}
+
 (** TODO *)
 
 type 'a group = {
@@ -150,6 +157,8 @@ type descr =
   | Def_sys of sys_def
   (** TODO: *)
   | Chk_sys of sys_check
+  (** TODO: *)
+  | Dec_enum_sort of enum_sort
   (** TODO: *)
 
   | Get_proof
