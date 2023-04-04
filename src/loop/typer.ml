@@ -1721,6 +1721,11 @@ module Typer(State : State.S) = struct
     typing_wrap ?attrs ?loc:(Some loc) ~input st ~f:(fun env ->
         T.check_sys env d
     )
+  
+  let declare_enum_sort st ~input loc ?attrs d =
+    typing_wrap ?attrs ?loc:(Some loc) ~input st ~f:(fun env ->
+        T.declare_enum_sort env d
+    )
 
 (* Wrappers around the Type-checking module *)
 (* ************************************************************************ *)
@@ -2086,14 +2091,15 @@ module Make
       let st, l = Typer.sys_def st ~input c.S.loc ~attrs:c.S.attrs s in
       let res : typechecked stmt = simple (decl_id c) c.S.loc l in
       st, res
-    
     | { S.descr = S.Chk_sys s ; _ } ->
       let st, l = Typer.check_sys st ~input c.S.loc ~attrs:c.S.attrs s in
       let res : typechecked stmt = simple (decl_id c) c.S.loc l in
       st, res
-    | { S.descr = S.Dec_enum_sort _ ; _ } ->
-      (* TODO Temp code is below *)
-      st, simple (other_id c) c.S.loc `Get_proof
+    | { S.descr = S.Dec_enum_sort e ; _ } ->
+      let st, l = Typer.declare_enum_sort st ~input c.S.loc ~attrs:c.S.attrs e in
+      let res : typechecked stmt = simple (decl_id c) c.S.loc l in
+      st, res
+    (* TODO ... *)
 
     (* Smtlib's proof/model instructions *)
     | { S.descr = S.Get_proof; _ } ->
