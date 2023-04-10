@@ -181,6 +181,7 @@ module type Formulas = sig
         | `Cstr of term_cstr * reason option
         | `Dstr of term_cst * reason option
         | `Term of term_cst * reason option
+        | `System of term_cst * term_cst * term_cst * reason option
         | `Field of term_field * reason option
       ]
   ]
@@ -485,6 +486,7 @@ module type Formulas = sig
     | `Dstr of term_cst
     | `Field of term_field
     | `Ty_cst of ty_cst
+    | `Sys_cst of term_cst * term_cst * term_cst
     | `Term_cst of term_cst
   ]
   (** Constant bindings *)

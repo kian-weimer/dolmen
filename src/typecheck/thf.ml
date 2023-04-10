@@ -148,6 +148,10 @@ module Make
     | `Term_cst of T.Const.t
   ]
 
+  type system_cst = [
+    | `Sys_cst of T.Const.t *  T.Const.t *  T.Const.t
+  ]
+
   type term_cstr = [
     | `Cstr of T.Cstr.t
   ]
@@ -161,7 +165,7 @@ module Make
   ]
 
   (* Constants that can be bound to a dolmen identifier. *)
-  type cst = [ ty_cst | term_cst | term_cstr | term_dstr | term_field ]
+  type cst = [ system_cst | ty_cst | term_cst | term_cstr | term_dstr | term_field ]
 
   (* Inference of variables and symbols *)
   type var_infer = {
@@ -233,6 +237,7 @@ module Make
         | `Cstr of T.Cstr.t * reason option
         | `Dstr of T.Const.t * reason option
         | `Term of T.Const.t * reason option
+        | `System of T.Const.t * T.Const.t * T.Const.t * reason option
         | `Field of T.Field.t * reason option
       ]
   ]
@@ -371,7 +376,6 @@ module Make
 
   (* Global, mutable state. *)
   type state = {
-
     mutable csts : cst M.t;
     (* association between dolmen ids and types/terms constants. *)
     mutable systems: cst M.t;
@@ -380,7 +384,7 @@ module Make
     (* stores reasons for typing of type constructors *)
     mutable const_locs : reason S.t;
     (* stores reasons for typing of constants *)
-    mutable system_locs : reason S.t;
+    mutable system_locs : reason S.t S.t S.t;
     (* stores reasons for typing of system_locs *)
     mutable cstrs_locs : reason U.t;
     (* stores reasons for typing adt constructors *)
@@ -525,6 +529,7 @@ module Make
         | `Letin (_, _, v, _) -> F.find v env.term_locs
         | `Ty_cst c -> R.find c env.st.ttype_locs
         | `Term_cst c -> S.find c env.st.const_locs
+        | `Sys_cst (i, o, l) -> S.find i (S.find o (S.find l env.st.system_locs))
         | `Cstr c -> U.find c env.st.cstrs_locs
         | `Dstr c -> S.find c env.st.dstrs_locs
         | `Field f -> V.find f env.st.field_locs
@@ -549,6 +554,7 @@ module Make
     | `Letin (_, _, v, _) -> `Variable (`Term (v, reason))
     | `Ty_cst c -> `Constant (`Ty (c, reason))
     | `Term_cst c -> `Constant (`Term (c, reason))
+    | `Sys_cst (i, o, l) -> `Constant (`System (i, o, l, reason))
     | `Cstr c -> `Constant (`Cstr (c, reason))
     | `Dstr c -> `Constant (`Dstr (c, reason))
     | `Field f -> `Constant (`Field (f, reason))
@@ -562,6 +568,7 @@ module Make
     | `Variable `Term (_, reason)
     | `Constant `Ty (_, reason)
     | `Constant `Term (_, reason)
+    | `Constant `System (_, _, _, reason)
     | `Constant `Cstr (_, reason)
     | `Constant `Dstr (_, reason)
     | `Constant `Field (_, reason)
@@ -748,7 +755,7 @@ module Make
     custom = st.custom;
     ttype_locs = st.ttype_locs;
     const_locs = st.const_locs;
-    system_locs = st.const_locs;
+    system_locs = st.system_locs;
     cstrs_locs = st.cstrs_locs;
     dstrs_locs = st.dstrs_locs;
     field_locs = st.field_locs;
@@ -1804,6 +1811,7 @@ module Make
     | `Letin (_, _, v, t) -> parse_app_letin_var env ast v s_ast t args
     | `Ty_cst f -> parse_app_ty_cst env ast f args
     | `Term_cst f -> parse_app_term_cst env ast f args
+    | `Sys_cst (_, _, _) -> assert false (* Todo if needed *)
     | `Dstr c -> parse_app_term_cst env ast c args
     | `Cstr c ->
       parse_app_cstr env ast c args
@@ -1874,7 +1882,6 @@ module Make
       let args = List.map (fun ast -> ast, parse_expr env ast) args in
       let ty_args, t_args = split_ho_args env ast n_ty args in
       Term (_wrap3 env ast T.apply_cst f ty_args t_args)
-
   and parse_app_cstr env ast c args =
     let n_ty, n_t = T.Cstr.arity c in
     let ty_args, t_l =
@@ -2432,7 +2439,7 @@ module Make
   (* CMC Only System Definitions and Checks *)
   (* ************************************************************************ *)
   (* Const declarations *)
-  let add_system env fragment id reason (v : cst) =
+  let add_system env fragment id reason v =
     begin match find_bound env id with
       | `Not_found -> ()
       | `Builtin `Infer _ -> () (* inferred builtins are meant to be shadowed/replaced *)
@@ -2440,10 +2447,47 @@ module Make
     end;
     env.st.systems <- M.add id v env.st.systems
 
-  let decl_sys env fg id c reason =
-    add_system env fg id reason (`Term_cst c);
-    env.st.const_locs <- S.add c reason env.st.const_locs
-  
+  let find_system env sid : [cst | not_found] = 
+    match M.find_opt sid env.st.systems with
+    | Some res -> (res :> [cst | not_found])
+    | None -> `Not_found
+
+  let split_fo_args2 _ n_ty n_t args = (* from split_fo_args *)
+    let n_args = List.length args in
+    if n_args = n_ty + n_t then
+      `Ok (Misc.Lists.take_drop n_ty args)
+    else
+      `Bad_arity ([n_ty + n_t], n_args)
+     
+
+  let parse_sys_app_symbol env s args_asts = (*from parse_app_term_cst*)
+    let n_ty, n_t = T.Const.arity s in
+      let ty_args, t_l =
+        match split_fo_args2 env n_ty n_t args_asts with
+        | `Ok (l, l') ->
+          let ty_args = List.map (parse_ty env) l in
+          ty_args, l'
+        | `Fixed (l, l') -> l, l'
+        | `Bad_arity _ ->
+          assert false (*TODO better error*)(* _bad_term_arity env f expected actual ast *)
+      in
+      let t_args = List.map (parse_term env) t_l in
+
+      (* TODO Do better here once we change the type of a sys def *)
+      assert (Ty.equal (T.ty (T.apply_cst s ty_args t_args)) (Ty.prop))
+
+  let parse_sys_app env sid input output local = 
+    let sys = match find_system env sid with
+      | #cst as res -> (res :> [ bound | not_found ])
+      | `Not_found ->
+        (find_builtin env sid :> [ bound | not_found ])
+    in
+    match sys with 
+    | `Sys_cst (i, o, l) -> parse_sys_app_symbol env i input ;
+    parse_sys_app_symbol env o output ;
+    parse_sys_app_symbol env l local
+    | _ -> assert false (* TODO ADD PROPER ERROR *)
+
   let op_list_to_list l =
     match l with
       | Some l -> l
@@ -2496,18 +2540,24 @@ module Make
     T.Const.mk (cst_path env name) ty
 
   let create_id_for_sig env input output local (s: Stmt.sys_def) =
-    let input_tys  = List.map (fun p -> T.Var.ty p) input  in
-    let output_tys = List.map (fun p -> T.Var.ty p) output in
-    let local_tys  = List.map (fun p -> T.Var.ty p) local  in
+    let input_tys  = Ty.arrow  (List.map (fun p -> T.Var.ty p) input ) Ty.prop in
+    let output_tys = Ty.arrow  (List.map (fun p -> T.Var.ty p) output ) Ty.prop in
+    let local_tys  = Ty.arrow  (List.map (fun p -> T.Var.ty p) local ) Ty.prop  in
     
     (* TODO Change the last element in the type to a 'unit' type *)
-    let ty = Ty.arrow input_tys (Ty.arrow output_tys  (Ty.arrow local_tys Ty.prop) ) in
+    (* let ty = Ty.arrow input_tys (Ty.arrow output_tys  (Ty.arrow local_tys Ty.prop) ) in *)
+    let i = mk_term_cst env (Id.name s.id) input_tys in
+    let o = mk_term_cst env (Id.name s.id) output_tys in
+    let l = mk_term_cst env (Id.name s.id) local_tys in
     
-    let f = mk_term_cst env (Id.name s.id) ty in
+    let (f : cst) = `Sys_cst (i, o, l) in
+
+    let reason = (SysDefined (env.file, s)) in
     
     (* Create a new thing that is not a term const? *)
-    decl_sys env (SysDef s) s.id f (SysDefined (env.file, s));
-    s.id, f(* `Term (s.id, f) *)
+    add_system env (SysDef s) s.id reason f; 
+    env.st.system_locs <-  S.add i (S.add o (S.add l reason S.empty) S.empty) S.empty ;
+    s.id, i (* `Term (s.id, f) *)
 
   let id_for_sig env input output local (s: Stmt.sys_def) =
     create_id_for_sig env input output local s
@@ -2521,10 +2571,41 @@ module Make
 
     `Sys_def (id, f, input, output, local)
 
+  let parse_subsystems env (parent_system : Stmt.sys_def) = 
+    parent_system.subs |> (List.fold_left (fun other_subs (local_name, sub_name, args) -> (
+      (* Make sure local name isn't used twice *)
+      let local_name_not_defined = ((List.find_opt (Id.equal local_name) other_subs) = None) in
+      assert local_name_not_defined ;
+      let rec split k xs = match xs with
+        | [] -> failwith "firstk"
+        | x::xs -> if k=1 then [x], xs else 
+          let fk, lk = split (k-1) xs in x::fk, lk in
+
+      let parse_sys_app env sid = 
+        let sys = match find_system env sid with
+          | #cst as res -> (res :> [ bound | not_found ])
+          | `Not_found ->
+            (find_builtin env sid :> [ bound | not_found ])
+        in
+        match sys with 
+        | `Sys_cst (i,o, _) -> 
+          let _, n_t = T.Const.arity i in
+          let input, output = split n_t args in
+          parse_sys_app_symbol env i input ;
+          parse_sys_app_symbol env o output ;
+          (* Locals are not parsed as they are created implicitly *)
+        | _ -> assert false (* TODO ADD PROPER ERROR *)
+      in
+      parse_sys_app env sub_name ;
+      local_name :: other_subs
+    ))) []
+
+
   let sys_def env (d : Stmt.sys_def) =
     let env = split_env_for_def env in
     let ssig_env, ssig_primed_env, input , output , local = parse_cmc_sig env d.input d.output d.local in
     parse_sys ssig_env ssig_primed_env d ;
+    let _ = parse_subsystems ssig_env d in
 
     (* TODO *)
     let id, f = id_for_sig ssig_env input output local d in
@@ -2540,46 +2621,6 @@ module Make
 
   (* High-level parsing function *)
   (* ************************************************************************ *)
-  let split_fo_args2 _ n_ty n_t args = (* from split_fo_args *)
-    let n_args = List.length args in
-    if n_args = n_ty + n_t then
-      `Ok (Misc.Lists.take_drop n_ty args)
-    else
-      `Bad_arity ([n_ty + n_t], n_args)
-     
-
-  let parse_sys_app_symbol env s args_asts = (*from parse_app_term_cst*)
-    let n_ty, n_t = T.Const.arity s in
-      let ty_args, t_l =
-        match split_fo_args2 env n_ty n_t args_asts with
-        | `Ok (l, l') ->
-          let ty_args = List.map (parse_ty env) l in
-          ty_args, l'
-        | `Fixed (l, l') -> l, l'
-        | `Bad_arity _ ->
-          assert false (*TODO better error*)(* _bad_term_arity env f expected actual ast *)
-      in
-      let t_args = List.map (parse_term env) t_l in
-
-      (* TODO Do better here once we change the type of a sys def *)
-      assert (Ty.equal (T.ty (T.apply_cst s ty_args t_args))  (Ty.prop))
-
-  let find_system env sid : [cst | not_found] = 
-    match M.find_opt sid env.st.systems with
-    | Some res -> (res :> [cst | not_found])
-    | None -> `Not_found
-
-  let parse_sys_app env sid input output local = 
-    let sys = match find_system env sid with
-      | #cst as res -> (res :> [ bound | not_found ])
-      | `Not_found ->
-        (find_builtin env sid :> [ bound | not_found ])
-    in
-    Format.printf "ID: %a" Id.print sid ;
-    match sys with 
-    | `Term_cst s -> parse_sys_app_symbol env s (input @ output @ local)
-    | _ -> assert false (* TODO ADD PROPER ERROR *)
-
   
   let parse_reachability_statement env prop_map r = 
     let id, (body: Ast.t) = r in
