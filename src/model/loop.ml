@@ -550,8 +550,6 @@ module Make
             st
           | `Sys_check -> 
             st
-          | `Dec_enum_sort -> 
-            st
           | `Hyp contents ->
             check_hyps ~file ~loc st contents
           | `Goal contents ->

@@ -213,9 +213,6 @@ module type Logic = sig
     (string * term list) list ->
     (string * (id * term)) list -> (id * term list) list -> t
 
-  val declare_enum_sort :  location -> id -> (id list) -> t
-  (** TODO  *)
-
   val funs_def_rec : ?loc:location -> (id * term list * term list * term * term) list -> t
   (** Define a list of mutually recursive functions. Each function has the same
       definition as in [fun_def] *)

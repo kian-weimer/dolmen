@@ -158,8 +158,6 @@ type descr =
   (** TODO: *)
   | Chk_sys of sys_check
   (** TODO: *)
-  | Dec_enum_sort of enum_sort
-  (** TODO: *)
 
   | Get_proof
   (** Get the proof of the last sequent (if it was proved). *)

@@ -306,6 +306,10 @@ selector_dec:
     T.colon ~loc f ty }
 ;
 
+enum_constructor_dec:
+  | s=SYMBOL 
+    { (I.mk I.term s), [] }
+
 constructor_dec:
   | OPEN s=SYMBOL l=selector_dec* CLOSE
     { (I.mk I.term s), l }
@@ -390,14 +394,6 @@ query:
 system_check:
   | s=SYMBOL args=system_var_dec* formulas=formula* queries=query*
     { I.(mk term s), args, formulas, List.flatten queries}
-
-enum_ident:
-  | s=SYMBOL
-    { I.(mk term s) }
-
-declare_enum: 
-  | enum=SYMBOL OPEN values=enum_ident+ CLOSE
-    {I.(mk term enum), values}
 
 /* Additional rule for prop_literals symbols, to have lighter
    semantic actions in prop_literal reductions. */
@@ -490,11 +486,11 @@ command:
     { let id, vars, subs, conds = f in
       let loc = L.mk_pos $startpos $endpos in
       S.sys_def loc id vars subs conds }
-  | OPEN DECLARE_ENUM_SORT f=declare_enum CLOSE
+  | OPEN DECLARE_ENUM_SORT s=SYMBOL OPEN d=enum_constructor_dec+ CLOSE CLOSE
     {
-      let id, values = f in
+      let constructors = d in
       let loc = L.mk_pos $startpos $endpos in
-      S.declare_enum_sort loc id values
+      S.datatypes ~loc [I.(mk sort s), [], constructors]
     }
   | OPEN CHECK_SYS f=system_check CLOSE
   { let id, vars, formulas, queries = f in
