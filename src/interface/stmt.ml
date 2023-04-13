@@ -209,9 +209,6 @@ module type Logic = sig
     (string * term list) list ->
     (string * (id * term)) list -> (id * term list) list -> t
 
-  val declare_enum_sort :  location -> id -> (id list) -> t
-  (** TODO  *)
-
   val pred_def    : ?loc:location -> id -> term list -> term list -> term -> t
   (** Symbol definition. [pred_def p vars args body] means that "p(args) = (body : bool)",
       i.e [p] is a predicate symbol with arguments [args], and which returns the value

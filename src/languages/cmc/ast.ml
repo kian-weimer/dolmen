@@ -28,9 +28,6 @@ module type Statement = sig
     (string * term list) list ->
     (string * (id * term)) list -> (id * term list) list -> t
 
-  val declare_enum_sort :  location -> id -> (id list) -> t
-  (** TODO  *)
-
 end
 (** implementation requirement for smtlib statements. *)
 

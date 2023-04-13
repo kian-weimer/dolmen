@@ -1722,11 +1722,6 @@ module Typer(State : State.S) = struct
         T.check_sys env d
     )
   
-  let declare_enum_sort st ~input loc ?attrs d =
-    typing_wrap ?attrs ?loc:(Some loc) ~input st ~f:(fun env ->
-        T.declare_enum_sort env d
-    )
-
 (* Wrappers around the Type-checking module *)
 (* ************************************************************************ *)
 
@@ -1813,7 +1808,6 @@ module Make
                   (* id, inputs, outputs, locals *)
     | `Sys_def of Dolmen.Std.Id.t * Expr.term_cst * Expr.term_var list * Expr.term_var list * Expr.term_var list (* Do we need a body or return type? I think no... *)
     | `Sys_check
-    | `Dec_enum_sort
   ]
 
   type decl = [
@@ -2060,11 +2054,6 @@ module Make
         
         | { S.descr = S.Chk_sys s ; _ } ->
           let st, l = Typer.check_sys st ~input c.S.loc ~attrs:c.S.attrs s in
-          let res : typechecked stmt = simple (decl_id c) c.S.loc l in
-          st, `Continue (res)
-        | { S.descr = S.Dec_enum_sort e ; _ } ->
-          (* TODO Temp code is below *)
-          let st, l = Typer.declare_enum_sort st ~input c.S.loc ~attrs:c.S.attrs e in
           let res : typechecked stmt = simple (decl_id c) c.S.loc l in
           st, `Continue (res)
 
