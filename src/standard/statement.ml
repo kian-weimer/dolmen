@@ -286,11 +286,10 @@ let print_attr fmt attr =
   | Some attr -> Term.print fmt attr
   | None -> Format.fprintf fmt "()" 
 
-let print_attrs fmt attrs = 
+let print_opt_attrs fmt attrs = 
   match attrs with
   | None -> Format.fprintf fmt "()"
-  | Some [] -> Format.fprintf fmt "()"
-  | Some attrs ->  Format.fprintf fmt "@[<hov 2>%a@]" (fun fmt attrs -> List.iter (Format.fprintf fmt "%a " Term.print) attrs) attrs 
+  | Some attrs -> print_attrs fmt attrs
   
 let print_def_sys fmt ({ id; loc = _; input; output; local; init; trans; inv; subs;} : sys_def) =
   let print_sub fmt (local_name, sys_name, vars) = 
@@ -304,9 +303,9 @@ let print_def_sys fmt ({ id; loc = _; input; output; local; init; trans; inv; su
 
   Format.fprintf fmt "@[<hov 2>def-sys:@ %a =@ {@,input = %a;@,output = %a;@,local = %a;@,init = %a;@,trans = %a;@,inv = %a;%a;@ }@]"
       Id.print id
-      print_attrs input
-      print_attrs output
-      print_attrs local
+      print_opt_attrs input
+      print_opt_attrs output
+      print_opt_attrs local
       print_attr init
       print_attr trans
       print_attr inv
@@ -323,9 +322,9 @@ let print_check_sys fmt ({id; input; output; local; reachable; queries}: sys_che
 
   Format.fprintf fmt "@[<hov 2>check-sys:@ %a =@ {@,input = %a;@,output = %a;@,local = %a;%a@;%a@,}@]"
   Id.print id
-  print_attrs input
-  print_attrs output
-  print_attrs local
+  print_opt_attrs input
+  print_opt_attrs output
+  print_opt_attrs local
   (Misc.print_list ~print_sep:Format.fprintf ~sep:"@," ~print:(print_formula "reachable")) reachable
   (Misc.print_list ~print_sep:Format.fprintf ~sep:"@," ~print:print_query) queries
 
@@ -618,7 +617,7 @@ let sys_def loc id vars subs conds =
 let sys_check ?loc id vars formulas queries = 
   let _ = id, vars, formulas, queries in
   mk_check_sys ?loc id vars formulas queries
-  
+
 
 let funs_def_rec ?loc l =
   let contents = List.map (fun (id, vars, params, ret_ty, body) ->
