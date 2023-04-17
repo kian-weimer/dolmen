@@ -2489,9 +2489,10 @@ module Make
         (find_builtin env sid :> [ bound | not_found ])
     in
     match sys with 
-    | `Sys_cst (i, o, l) -> parse_sys_app_symbol env i input ;
-    parse_sys_app_symbol env o output ;
-    parse_sys_app_symbol env l local
+    | `Sys_cst (i, o, l) -> 
+      if ((List.length input) > 0) then parse_sys_app_symbol env i input ;
+      if List.length output > 0 then parse_sys_app_symbol env o output ;
+      if List.length local > 0 then parse_sys_app_symbol env l local ;
     | _ -> assert false (* TODO ADD PROPER ERROR *)
 
   let op_list_to_list l =
@@ -2584,8 +2585,14 @@ module Make
       assert local_name_not_defined ;
       let rec split k xs = match xs with
         | [] -> failwith "firstk"
-        | x::xs -> if k=1 then [x], xs else 
-          let fk, lk = split (k-1) xs in x::fk, lk in
+        | x::xs -> 
+          if k=1 then 
+            [x], xs 
+          else 
+            if k=0 then
+              [], x::xs
+            else
+              let fk, lk = split (k-1) xs in x::fk, lk in
 
       let parse_sys_app env sid = 
         let sys = match find_system env sid with
@@ -2597,8 +2604,8 @@ module Make
         | `Sys_cst (i,o, _) -> 
           let _, n_t = T.Const.arity i in
           let input, output = split n_t args in
-          parse_sys_app_symbol env i input ;
-          parse_sys_app_symbol env o output ;
+            if ((List.length input) > 0) then parse_sys_app_symbol env i input ;
+            if ((List.length input) > 0) then parse_sys_app_symbol env o output ;
           (* Locals are not parsed as they are created implicitly *)
         | _ -> assert false (* TODO ADD PROPER ERROR *)
       in
