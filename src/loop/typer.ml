@@ -1468,7 +1468,33 @@ module Typer(State : State.S) = struct
        - restrictions come from the logic declaration
        - shadowing is forbidden
     *)
-    | `Logic CMC v (* TODO verify CMC still uses SMT logics, may need its own case *)
+    | `Logic CMC v ->
+      let poly = T.Implicit in
+      let var_infer = T.{
+          var_hook = ignore;
+          infer_unbound_vars = No_inference;
+          infer_type_vars_in_binding_pos = true;
+          infer_term_vars_in_binding_pos = No_inference;
+        } in
+      let sym_infer = T.{
+          sym_hook = ignore;
+          infer_type_csts = false;
+          infer_term_csts = No_inference;
+        } in
+      let logic = (match (State.get ty_state st).logic with
+      | Auto -> Dolmen_type.Logic.Smtlib2.all
+      | Smtlib2 logic -> logic ) in
+
+      let builtins = Dolmen_type.Base.merge (
+              additional_builtins ::
+              builtins_of_smtlib2_logic (`Script v) logic
+            ) in
+      let quants = logic.features.quantifiers in
+      T.empty_env ~order:First_order
+        ~st:(State.get ty_state st).typer
+        ~var_infer ~sym_infer ~poly ~quants
+        ~warnings ~file builtins
+      
     | `Logic Smtlib2 v ->
       let poly = T.Implicit in
       let var_infer = T.{
@@ -1622,7 +1648,7 @@ module Typer(State : State.S) = struct
     match lang_of_input input with
     | `Logic ICNF -> st
     | `Logic Dimacs -> st
-    | `Logic CMC _ (* TODO verify CMC still uses SMT logics, may need its own case *)
+    | `Logic CMC _
     | `Logic Smtlib2 _ ->
       let logic =
         match State.get smtlib2_forced_logic st with
