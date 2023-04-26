@@ -79,6 +79,12 @@ let test file =
     Format.printf "%a@\n@." Typer.print typed_stmt
   ) typed_stmts
 ```
+```mdx-error
+Lines 24-26, characters 7-73:
+Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+Here is an example of a case that is not matched:
+CMC _
+```
 
 We can now use our function to see what happens on various files:
 
