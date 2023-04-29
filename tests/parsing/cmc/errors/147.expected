@@ -1,0 +1,7 @@
+File "tests/parsing/cmc/errors/147.cmc", line 1, character 28-34:
+1 | (check-system sys :input () :trans)
+                                ^^^^^^
+Error while parsing a check system command definition,
+      read the reserved word ':trans',
+      but expected a keyword from the set  (:input, :output, :local,
+      :reachable, :query, :queries).

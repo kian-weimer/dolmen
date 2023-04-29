@@ -3761,18 +3761,6 @@ file: UNDERSCORE
 an input statement
 an opening parenthesis to start a command
 
-file: OPEN DEFINE_SYS UNDERSCORE
-##
-## Ends in an error in state: 211.
-##
-## command -> OPEN DEFINE_SYS . system_def CLOSE [ OPEN EOF ]
-##
-## The known suffix of the stack is as follows:
-## OPEN DEFINE_SYS
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
 file: OPEN DEFINE_SYS SYMBOL UNDERSCORE
 ##
 ## Ends in an error in state: 212.
@@ -3783,7 +3771,9 @@ file: OPEN DEFINE_SYS SYMBOL UNDERSCORE
 ## SYMBOL
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+118
+a system definition
+a keyword (:input, :output, :local, :subsys, :init, :trans, :inv)
 
 file: OPEN CHECK_SYS SYMBOL SYS_OUTPUT UNDERSCORE
 ##
@@ -3795,7 +3785,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_OUTPUT UNDERSCORE
 ## SYS_OUTPUT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+119
+a system output definition
+a list of sorted variables
 
 file: OPEN CHECK_SYS SYMBOL SYS_OUTPUT OPEN UNDERSCORE
 ##
@@ -3807,7 +3799,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_OUTPUT OPEN UNDERSCORE
 ## SYS_OUTPUT OPEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+120
+a system output variable declaration
+a sorted variable of the form "(var sort)", or a closing parenthesis
 
 file: OPEN CHECK_SYS SYMBOL SYS_LOCAL UNDERSCORE
 ##
@@ -3819,7 +3813,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_LOCAL UNDERSCORE
 ## SYS_LOCAL
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+121
+a system local definition
+a list of sorted variables
 
 file: OPEN CHECK_SYS SYMBOL SYS_LOCAL OPEN UNDERSCORE
 ##
@@ -3831,7 +3827,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_LOCAL OPEN UNDERSCORE
 ## SYS_LOCAL OPEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+122
+a system local variable declaration
+a sorted variable of the form "(var sort)", or a closing parenthesis
 
 file: OPEN CHECK_SYS SYMBOL SYS_INPUT UNDERSCORE
 ##
@@ -3843,7 +3841,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_INPUT UNDERSCORE
 ## SYS_INPUT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+123
+a system input definition
+a list of sorted variables
 
 file: OPEN CHECK_SYS SYMBOL SYS_INPUT OPEN UNDERSCORE
 ##
@@ -3855,7 +3855,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_INPUT OPEN UNDERSCORE
 ## SYS_INPUT OPEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+124
+a system input variable declaration
+a sorted variable of the form "(var sort)", or a closing parenthesis
 
 file: OPEN CHECK_SYS SYMBOL SYS_INPUT OPEN CLOSE UNDERSCORE
 ##
@@ -3867,7 +3869,9 @@ file: OPEN CHECK_SYS SYMBOL SYS_INPUT OPEN CLOSE UNDERSCORE
 ## system_var_dec
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+125
+a system definition
+a keyword (:input, :output, :local, :subsys, :init, :trans, :inv)
 
 file: OPEN DEFINE_SYS SYMBOL SYS_INPUT OPEN CLOSE CLOSE
 ##
@@ -3886,7 +3890,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_INPUT OPEN CLOSE CLOSE
 ## In state 228, spurious reduction of production list(system_var_dec) -> system_var_dec list(system_var_dec)
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+126
+a system definition
+a subsystem declaration or function definition (:init, :trans, :inv)
 
 file: OPEN DEFINE_SYS SYMBOL SYS_TRANS UNDERSCORE
 ##
@@ -3898,7 +3904,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_TRANS UNDERSCORE
 ## SYS_TRANS
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+127
+a transition function definition
+an s-expression
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS UNDERSCORE
 ##
@@ -3911,7 +3919,10 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS UNDERSCORE
 ## SYS_SUBSYS
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+128
+a subsystem declaration
+an s-expression of the form 
+`(local_name (subsystem_name var_a var_b ...))`
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN UNDERSCORE
 ##
@@ -3924,7 +3935,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN UNDERSCORE
 ## SYS_SUBSYS OPEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+129
+a subsystem declaration
+a local subsystem name
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL UNDERSCORE
 ##
@@ -3937,7 +3950,10 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL UNDERSCORE
 ## SYS_SUBSYS OPEN SYMBOL
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+130
+a subsystem declaration
+a call to a defined system of the form
+`(input_arg1 ... input_argn output_arg1 ... output_argn)`
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL SYMBOL UNDERSCORE
 ##
@@ -3949,7 +3965,11 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL SYMBOL UNDERSCORE
 ## SYS_SUBSYS OPEN SYMBOL SYMBOL
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+131
+a subsystem declaration with zero arguments
+a closing parenthesis. To define a subsystem with arguments 
+parenthesis must be added around the subsystem name and args. 
+`(local_name (subsystem_name var_a var_b ...))`
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL OPEN UNDERSCORE
 ##
@@ -3961,7 +3981,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL OPEN UNDERSCORE
 ## SYS_SUBSYS OPEN SYMBOL OPEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+132
+a subsystem call
+a defined subsystem name
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL OPEN SYMBOL UNDERSCORE
 ##
@@ -3973,7 +3995,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL OPEN SYMBOL UNDERSCORE
 ## SYS_SUBSYS OPEN SYMBOL OPEN SYMBOL
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+133
+a subsystem call
+a list of input and output variable names or a closing parenthesis
 
 file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL OPEN SYMBOL UNDERSCORE
 ##
@@ -3985,7 +4009,9 @@ file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL OPEN SYMBOL UNDERSCORE
 ## pattern_symbol
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+134
+a query definition
+a reachability variable name or closing parenthesis
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
 ##
@@ -3997,7 +4023,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
 ## SYS_SUBSYS OPEN SYMBOL OPEN SYMBOL list(pattern_symbol) CLOSE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+135
+A subsystem declaration
+A closing parenthesis
 
 file: OPEN DEFINE_SYS SYMBOL SYS_INV UNDERSCORE
 ##
@@ -4009,7 +4037,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_INV UNDERSCORE
 ## SYS_INV
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+136
+a invariant function definition
+an s-expression
 
 file: OPEN DEFINE_SYS SYMBOL SYS_INIT UNDERSCORE
 ##
@@ -4021,7 +4051,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_INIT UNDERSCORE
 ## SYS_INIT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+137
+a init function definition
+an s-expression
 
 file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL SYMBOL CLOSE UNDERSCORE
 ##
@@ -4034,7 +4066,9 @@ file: OPEN DEFINE_SYS SYMBOL SYS_SUBSYS OPEN SYMBOL SYMBOL CLOSE UNDERSCORE
 ## system_subsys_dec
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+138
+a system definition
+a keyword (:subsys, :init, :trans, :inv)
 
 file: OPEN DEFINE_SYS SYMBOL SYS_INIT SYMBOL UNDERSCORE
 ##
@@ -4047,7 +4081,345 @@ file: OPEN DEFINE_SYS SYMBOL SYS_INIT SYMBOL UNDERSCORE
 ## system_cond_def
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+139
+a system definition
+a keyword (:subsys, :init, :trans, :inv)
+
+file: OPEN CHECK_SYS SYMBOL UNDERSCORE
+##
+## Ends in an error in state: 366.
+##
+## system_check -> SYMBOL . list(system_var_dec) list(formula) list(query) [ CLOSE ]
+##
+## The known suffix of the stack is as follows:
+## SYMBOL
+##
+
+146
+a check system command definition
+a keyword from the set 
+(:input, :output, :local, :reachable, :query, :queries)
+
+file: OPEN CHECK_SYS SYMBOL SYS_INPUT OPEN CLOSE SYS_TRANS
+##
+## Ends in an error in state: 367.
+##
+## system_check -> SYMBOL list(system_var_dec) . list(formula) list(query) [ CLOSE ]
+##
+## The known suffix of the stack is as follows:
+## SYMBOL list(system_var_dec)
+##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 227, spurious reduction of production list(system_var_dec) ->
+## In state 228, spurious reduction of production list(system_var_dec) -> system_var_dec list(system_var_dec)
+##
+
+147
+a check system command definition
+a keyword from the set 
+(:input, :output, :local, :reachable, :query, :queries)
+
+file: OPEN CHECK_SYS SYMBOL CHECK_REACH UNDERSCORE
+##
+## Ends in an error in state: 368.
+##
+## formula -> CHECK_REACH . OPEN SYMBOL term CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_REACH
+##
+
+148
+a reachability variable definition
+an s-expression of the form `(name value)`
+
+file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN UNDERSCORE
+##
+## Ends in an error in state: 369.
+##
+## formula -> CHECK_REACH OPEN . SYMBOL term CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_REACH OPEN
+##
+
+149
+a reachability variable definition
+a variable name 
+
+file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN SYMBOL UNDERSCORE
+##
+## Ends in an error in state: 370.
+##
+## formula -> CHECK_REACH OPEN SYMBOL . term CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_REACH OPEN SYMBOL
+##
+
+150
+a reachability variable definition
+an s-expression defining the reachability variable
+
+file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN SYMBOL SYMBOL UNDERSCORE
+##
+## Ends in an error in state: 371.
+##
+## formula -> CHECK_REACH OPEN SYMBOL term . CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_REACH OPEN SYMBOL term
+##
+
+151
+a reachability variable definition
+a closing parenthesis
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERY UNDERSCORE
+##
+## Ends in an error in state: 374.
+##
+## query -> CHECK_QUERY . query_base [ CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_QUERY
+##
+
+152
+a system query
+a query of the form
+`(query_name (reachable_var1 ... reachable_varn))`
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN UNDERSCORE
+##
+## Ends in an error in state: 375.
+##
+## query_base -> OPEN . SYMBOL OPEN list(pattern_symbol) CLOSE CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## OPEN
+##
+
+153
+a system query
+a query name
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL UNDERSCORE
+##
+## Ends in an error in state: 376.
+##
+## query_base -> OPEN SYMBOL . OPEN list(pattern_symbol) CLOSE CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## OPEN SYMBOL
+##
+
+154
+a system query
+a list of reachability variables
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL OPEN UNDERSCORE
+##
+## Ends in an error in state: 377.
+##
+## query_base -> OPEN SYMBOL OPEN . list(pattern_symbol) CLOSE CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## OPEN SYMBOL OPEN
+##
+
+155
+a system query
+a reachability variable name
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL OPEN CLOSE UNDERSCORE
+##
+## Ends in an error in state: 379.
+##
+## query_base -> OPEN SYMBOL OPEN list(pattern_symbol) CLOSE . CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## OPEN SYMBOL OPEN list(pattern_symbol) CLOSE
+##
+
+156
+a system query
+a closing parenthesis
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES UNDERSCORE
+##
+## Ends in an error in state: 382.
+##
+## query -> CHECK_QUERIES . OPEN list(query_base) CLOSE [ CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_QUERIES
+##
+
+157
+a system query list
+a list of queries of the form
+`((query_name (reachable_var1 ... reachable_varn)) ... )`
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES OPEN UNDERSCORE
+##
+## Ends in an error in state: 383.
+##
+## query -> CHECK_QUERIES OPEN . list(query_base) CLOSE [ CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## CHECK_QUERIES OPEN
+##
+
+158
+a system query
+a query of the form
+`(query_name (reachable_var1 ... reachable_varn))`
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES OPEN OPEN SYMBOL OPEN CLOSE CLOSE UNDERSCORE
+##
+## Ends in an error in state: 384.
+##
+## list(query_base) -> query_base . list(query_base) [ CLOSE ]
+##
+## The known suffix of the stack is as follows:
+## query_base
+##
+
+159
+a system query list
+a system query definition or closing parenthesis
+
+file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES OPEN CLOSE UNDERSCORE
+##
+## Ends in an error in state: 388.
+##
+## list(query) -> query . list(query) [ CLOSE ]
+##
+## The known suffix of the stack is as follows:
+## query
+##
+
+160
+a check system command definition
+a system query keyword (:query or :queries) or a closing parenthesis
+
+file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN SYMBOL SYMBOL CLOSE UNDERSCORE
+##
+## Ends in an error in state: 391.
+##
+## list(formula) -> formula . list(formula) [ CLOSE CHECK_QUERY CHECK_QUERIES ]
+##
+## The known suffix of the stack is as follows:
+## formula
+##
+
+161
+a check system command definition
+a system query keyword (:reachable, :query or :queries) or a closing parenthesis
+
+input: OPEN DEFINE_SYS UNDERSCORE
+##
+## Ends in an error in state: 468.
+##
+## command -> OPEN DEFINE_SYS . system_def CLOSE [ # ]
+##
+## The known suffix of the stack is as follows:
+## OPEN DEFINE_SYS
+##
+
+162
+a system definition
+a system name symbol
+
+input: OPEN DECLARE_ENUM_SORT UNDERSCORE
+##
+## Ends in an error in state: 503.
+##
+## command -> OPEN DECLARE_ENUM_SORT . SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE CLOSE [ # ]
+##
+## The known suffix of the stack is as follows:
+## OPEN DECLARE_ENUM_SORT
+##
+
+163
+an enumeration declaration
+a symbol representing the enum type
+
+input: OPEN DECLARE_ENUM_SORT SYMBOL UNDERSCORE
+##
+## Ends in an error in state: 504.
+##
+## command -> OPEN DECLARE_ENUM_SORT SYMBOL . OPEN nonempty_list(enum_constructor_dec) CLOSE CLOSE [ # ]
+##
+## The known suffix of the stack is as follows:
+## OPEN DECLARE_ENUM_SORT SYMBOL
+##
+
+164
+an enumeration declaration
+a list of enumeration variables 
+`(enum1 enum2 ...)`
+
+input: OPEN DECLARE_ENUM_SORT SYMBOL OPEN UNDERSCORE
+##
+## Ends in an error in state: 505.
+##
+## command -> OPEN DECLARE_ENUM_SORT SYMBOL OPEN . nonempty_list(enum_constructor_dec) CLOSE CLOSE [ # ]
+##
+## The known suffix of the stack is as follows:
+## OPEN DECLARE_ENUM_SORT SYMBOL OPEN
+##
+
+165
+an enumeration declaration
+a nonempty list of enumeration variables 
+`(enum1 enum2 ...)`
+
+input: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
+##
+## Ends in an error in state: 507.
+##
+## command -> OPEN DECLARE_ENUM_SORT SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE . CLOSE [ # ]
+##
+## The known suffix of the stack is as follows:
+## OPEN DECLARE_ENUM_SORT SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE
+##
+
+166
+an enumeration declaration
+a closing parenthesis
+
+input: OPEN CHECK_SYS UNDERSCORE
+##
+## Ends in an error in state: 525.
+##
+## command -> OPEN CHECK_SYS . system_check CLOSE [ # ]
+##
+## The known suffix of the stack is as follows:
+## OPEN CHECK_SYS
+##
+
+167
+a check system command
+a symbol corresponding to a defined system
+
+file: OPEN DEFINE_SYS UNDERSCORE
+##
+## Ends in an error in state: 211.
+##
+## command -> OPEN DEFINE_SYS . system_def CLOSE [ OPEN EOF ]
+##
+## The known suffix of the stack is as follows:
+## OPEN DEFINE_SYS
+##
+
+168
+a system definition
+a system name symbol
 
 file: OPEN DECLARE_ENUM_SORT UNDERSCORE
 ##
@@ -4059,7 +4431,9 @@ file: OPEN DECLARE_ENUM_SORT UNDERSCORE
 ## OPEN DECLARE_ENUM_SORT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+169
+an enumeration declaration
+a symbol representing the enum type
 
 file: OPEN DECLARE_ENUM_SORT SYMBOL UNDERSCORE
 ##
@@ -4071,7 +4445,10 @@ file: OPEN DECLARE_ENUM_SORT SYMBOL UNDERSCORE
 ## OPEN DECLARE_ENUM_SORT SYMBOL
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+170
+an enumeration declaration
+a list of enumeration variables 
+`(enum1 enum2 ...)`
 
 file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN UNDERSCORE
 ##
@@ -4083,7 +4460,10 @@ file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN UNDERSCORE
 ## OPEN DECLARE_ENUM_SORT SYMBOL OPEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+171
+an enumeration declaration
+a nonempty list of enumeration variables 
+`(enum1 enum2 ...)`
 
 file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
 ##
@@ -4095,7 +4475,9 @@ file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
 ## OPEN DECLARE_ENUM_SORT SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+172
+an enumeration declaration
+a closing parenthesis
 
 file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL UNDERSCORE
 ##
@@ -4120,275 +4502,6 @@ file: OPEN CHECK_SYS UNDERSCORE
 ## OPEN CHECK_SYS
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL UNDERSCORE
-##
-## Ends in an error in state: 366.
-##
-## system_check -> SYMBOL . list(system_var_dec) list(formula) list(query) [ CLOSE ]
-##
-## The known suffix of the stack is as follows:
-## SYMBOL
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL SYS_INPUT OPEN CLOSE SYS_TRANS
-##
-## Ends in an error in state: 367.
-##
-## system_check -> SYMBOL list(system_var_dec) . list(formula) list(query) [ CLOSE ]
-##
-## The known suffix of the stack is as follows:
-## SYMBOL list(system_var_dec)
-##
-## WARNING: This example involves spurious reductions.
-## This implies that, although the LR(1) items shown above provide an
-## accurate view of the past (what has been recognized so far), they
-## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 227, spurious reduction of production list(system_var_dec) ->
-## In state 228, spurious reduction of production list(system_var_dec) -> system_var_dec list(system_var_dec)
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_REACH UNDERSCORE
-##
-## Ends in an error in state: 368.
-##
-## formula -> CHECK_REACH . OPEN SYMBOL term CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_REACH
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN UNDERSCORE
-##
-## Ends in an error in state: 369.
-##
-## formula -> CHECK_REACH OPEN . SYMBOL term CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_REACH OPEN
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN SYMBOL UNDERSCORE
-##
-## Ends in an error in state: 370.
-##
-## formula -> CHECK_REACH OPEN SYMBOL . term CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_REACH OPEN SYMBOL
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN SYMBOL SYMBOL UNDERSCORE
-##
-## Ends in an error in state: 371.
-##
-## formula -> CHECK_REACH OPEN SYMBOL term . CLOSE [ CLOSE CHECK_REACH CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_REACH OPEN SYMBOL term
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERY UNDERSCORE
-##
-## Ends in an error in state: 374.
-##
-## query -> CHECK_QUERY . query_base [ CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_QUERY
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN UNDERSCORE
-##
-## Ends in an error in state: 375.
-##
-## query_base -> OPEN . SYMBOL OPEN list(pattern_symbol) CLOSE CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## OPEN
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL UNDERSCORE
-##
-## Ends in an error in state: 376.
-##
-## query_base -> OPEN SYMBOL . OPEN list(pattern_symbol) CLOSE CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## OPEN SYMBOL
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL OPEN UNDERSCORE
-##
-## Ends in an error in state: 377.
-##
-## query_base -> OPEN SYMBOL OPEN . list(pattern_symbol) CLOSE CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## OPEN SYMBOL OPEN
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERY OPEN SYMBOL OPEN CLOSE UNDERSCORE
-##
-## Ends in an error in state: 379.
-##
-## query_base -> OPEN SYMBOL OPEN list(pattern_symbol) CLOSE . CLOSE [ OPEN CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## OPEN SYMBOL OPEN list(pattern_symbol) CLOSE
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES UNDERSCORE
-##
-## Ends in an error in state: 382.
-##
-## query -> CHECK_QUERIES . OPEN list(query_base) CLOSE [ CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_QUERIES
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES OPEN UNDERSCORE
-##
-## Ends in an error in state: 383.
-##
-## query -> CHECK_QUERIES OPEN . list(query_base) CLOSE [ CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## CHECK_QUERIES OPEN
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES OPEN OPEN SYMBOL OPEN CLOSE CLOSE UNDERSCORE
-##
-## Ends in an error in state: 384.
-##
-## list(query_base) -> query_base . list(query_base) [ CLOSE ]
-##
-## The known suffix of the stack is as follows:
-## query_base
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_QUERIES OPEN CLOSE UNDERSCORE
-##
-## Ends in an error in state: 388.
-##
-## list(query) -> query . list(query) [ CLOSE ]
-##
-## The known suffix of the stack is as follows:
-## query
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: OPEN CHECK_SYS SYMBOL CHECK_REACH OPEN SYMBOL SYMBOL CLOSE UNDERSCORE
-##
-## Ends in an error in state: 391.
-##
-## list(formula) -> formula . list(formula) [ CLOSE CHECK_QUERY CHECK_QUERIES ]
-##
-## The known suffix of the stack is as follows:
-## formula
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-input: OPEN DEFINE_SYS UNDERSCORE
-##
-## Ends in an error in state: 468.
-##
-## command -> OPEN DEFINE_SYS . system_def CLOSE [ # ]
-##
-## The known suffix of the stack is as follows:
-## OPEN DEFINE_SYS
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-input: OPEN DECLARE_ENUM_SORT UNDERSCORE
-##
-## Ends in an error in state: 503.
-##
-## command -> OPEN DECLARE_ENUM_SORT . SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE CLOSE [ # ]
-##
-## The known suffix of the stack is as follows:
-## OPEN DECLARE_ENUM_SORT
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-input: OPEN DECLARE_ENUM_SORT SYMBOL UNDERSCORE
-##
-## Ends in an error in state: 504.
-##
-## command -> OPEN DECLARE_ENUM_SORT SYMBOL . OPEN nonempty_list(enum_constructor_dec) CLOSE CLOSE [ # ]
-##
-## The known suffix of the stack is as follows:
-## OPEN DECLARE_ENUM_SORT SYMBOL
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-input: OPEN DECLARE_ENUM_SORT SYMBOL OPEN UNDERSCORE
-##
-## Ends in an error in state: 505.
-##
-## command -> OPEN DECLARE_ENUM_SORT SYMBOL OPEN . nonempty_list(enum_constructor_dec) CLOSE CLOSE [ # ]
-##
-## The known suffix of the stack is as follows:
-## OPEN DECLARE_ENUM_SORT SYMBOL OPEN
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-input: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
-##
-## Ends in an error in state: 507.
-##
-## command -> OPEN DECLARE_ENUM_SORT SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE . CLOSE [ # ]
-##
-## The known suffix of the stack is as follows:
-## OPEN DECLARE_ENUM_SORT SYMBOL OPEN nonempty_list(enum_constructor_dec) CLOSE
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-input: OPEN CHECK_SYS UNDERSCORE
-##
-## Ends in an error in state: 525.
-##
-## command -> OPEN CHECK_SYS . system_check CLOSE [ # ]
-##
-## The known suffix of the stack is as follows:
-## OPEN CHECK_SYS
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
+174
+a check system command
+a symbol corresponding to a defined system

@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/158.cmc", line 1, character 28-29:
+1 | (check-system sys :queries (a))
+                                ^
+Error while parsing a system query, read the symbol 'a',
+      but expected a query of the form `(query_name (reachable_var1 ...
+      reachable_varn))`.

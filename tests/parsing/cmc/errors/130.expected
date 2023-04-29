@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/130.cmc", line 1, character 29-30:
+1 | (define-system sys :subsys (a))
+                                 ^
+Error while parsing a subsystem declaration, read a closing parenthesis,
+      but expected a call to a defined system of the form `(input_arg1 ...
+      input_argn output_arg1 ... output_argn)`.

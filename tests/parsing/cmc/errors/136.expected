@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/136.cmc", line 1, character 24-25:
+1 | (define-system sys :inv )
+                            ^
+Error while parsing a invariant function definition,
+      read a closing parenthesis,
+      but expected an s-expression.

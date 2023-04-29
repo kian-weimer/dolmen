@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/150.cmc", line 1, character 31-32:
+1 | (check-system sys :reachable (a))
+                                   ^
+Error while parsing a reachability variable definition,
+      read a closing parenthesis,
+      but expected an s-expression defining the reachability variable.

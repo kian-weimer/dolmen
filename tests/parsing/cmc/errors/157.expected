@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/157.cmc", line 1, character 27-28:
+1 | (check-system sys :queries )
+                               ^
+Error while parsing a system query list, read a closing parenthesis,
+      but expected a list of queries of the form `((query_name
+      (reachable_var1 ... reachable_varn)) ... )`.

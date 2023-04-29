@@ -1,0 +1,5 @@
+File "tests/parsing/cmc/errors/135.cmc", line 1, character 34-39:
+1 | (define-system sys :subsys (a (b) :init) )
+                                      ^^^^^
+Error while parsing A subsystem declaration, read the reserved word ':init',
+      but expected A closing parenthesis.

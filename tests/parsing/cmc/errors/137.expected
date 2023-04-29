@@ -1,0 +1,5 @@
+File "tests/parsing/cmc/errors/137.cmc", line 1, character 24-25:
+1 | (define-system sys :init)
+                            ^
+Error while parsing a init function definition, read a closing parenthesis,
+      but expected an s-expression.

@@ -1,0 +1,5 @@
+File "tests/parsing/cmc/errors/119.cmc", line 1, character 27-28:
+1 | (define-system sys :output )
+                               ^
+Error while parsing a system output definition, read a closing parenthesis,
+      but expected a list of sorted variables.

@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/160.cmc", line 1, character 37-38:
+1 | (check-system sys :queries ((q (r))) f)
+                                         ^
+Error while parsing a check system command definition, read the symbol 'f',
+      but expected a system query keyword (:query or :queries) or a closing
+      parenthesis.

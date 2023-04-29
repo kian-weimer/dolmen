@@ -33,4 +33,1444 @@
   (action (diff 001_identifier_index_1.expected 001_identifier_index_1.full)))
 
 
+; Test for 118_def_system_missing_keyword.cmc
+; Incremental test
+
+(rule
+   (target  118_def_system_missing_keyword.incremental)
+   (deps    (:input 118_def_system_missing_keyword.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 118_def_system_missing_keyword.expected 118_def_system_missing_keyword.incremental)))
+
+; Full mode test
+
+(rule
+   (target  118_def_system_missing_keyword.full)
+   (deps    (:input 118_def_system_missing_keyword.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 118_def_system_missing_keyword.expected 118_def_system_missing_keyword.full)))
+
+
+; Test for 119.cmc
+; Incremental test
+
+(rule
+   (target  119.incremental)
+   (deps    (:input 119.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 119.expected 119.incremental)))
+
+; Full mode test
+
+(rule
+   (target  119.full)
+   (deps    (:input 119.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 119.expected 119.full)))
+
+
+; Test for 120.cmc
+; Incremental test
+
+(rule
+   (target  120.incremental)
+   (deps    (:input 120.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 120.expected 120.incremental)))
+
+; Full mode test
+
+(rule
+   (target  120.full)
+   (deps    (:input 120.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 120.expected 120.full)))
+
+
+; Test for 121.cmc
+; Incremental test
+
+(rule
+   (target  121.incremental)
+   (deps    (:input 121.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 121.expected 121.incremental)))
+
+; Full mode test
+
+(rule
+   (target  121.full)
+   (deps    (:input 121.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 121.expected 121.full)))
+
+
+; Test for 122.cmc
+; Incremental test
+
+(rule
+   (target  122.incremental)
+   (deps    (:input 122.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 122.expected 122.incremental)))
+
+; Full mode test
+
+(rule
+   (target  122.full)
+   (deps    (:input 122.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 122.expected 122.full)))
+
+
+; Test for 123.cmc
+; Incremental test
+
+(rule
+   (target  123.incremental)
+   (deps    (:input 123.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 123.expected 123.incremental)))
+
+; Full mode test
+
+(rule
+   (target  123.full)
+   (deps    (:input 123.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 123.expected 123.full)))
+
+
+; Test for 124.cmc
+; Incremental test
+
+(rule
+   (target  124.incremental)
+   (deps    (:input 124.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 124.expected 124.incremental)))
+
+; Full mode test
+
+(rule
+   (target  124.full)
+   (deps    (:input 124.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 124.expected 124.full)))
+
+
+; Test for 125.cmc
+; Incremental test
+
+(rule
+   (target  125.incremental)
+   (deps    (:input 125.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 125.expected 125.incremental)))
+
+; Full mode test
+
+(rule
+   (target  125.full)
+   (deps    (:input 125.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 125.expected 125.full)))
+
+
+; Test for 126.cmc
+; Incremental test
+
+(rule
+   (target  126.incremental)
+   (deps    (:input 126.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 126.expected 126.incremental)))
+
+; Full mode test
+
+(rule
+   (target  126.full)
+   (deps    (:input 126.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 126.expected 126.full)))
+
+
+; Test for 127.cmc
+; Incremental test
+
+(rule
+   (target  127.incremental)
+   (deps    (:input 127.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 127.expected 127.incremental)))
+
+; Full mode test
+
+(rule
+   (target  127.full)
+   (deps    (:input 127.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 127.expected 127.full)))
+
+
+; Test for 128.cmc
+; Incremental test
+
+(rule
+   (target  128.incremental)
+   (deps    (:input 128.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 128.expected 128.incremental)))
+
+; Full mode test
+
+(rule
+   (target  128.full)
+   (deps    (:input 128.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 128.expected 128.full)))
+
+
+; Test for 129.cmc
+; Incremental test
+
+(rule
+   (target  129.incremental)
+   (deps    (:input 129.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 129.expected 129.incremental)))
+
+; Full mode test
+
+(rule
+   (target  129.full)
+   (deps    (:input 129.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 129.expected 129.full)))
+
+
+; Test for 130.cmc
+; Incremental test
+
+(rule
+   (target  130.incremental)
+   (deps    (:input 130.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 130.expected 130.incremental)))
+
+; Full mode test
+
+(rule
+   (target  130.full)
+   (deps    (:input 130.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 130.expected 130.full)))
+
+
+; Test for 131.cmc
+; Incremental test
+
+(rule
+   (target  131.incremental)
+   (deps    (:input 131.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 131.expected 131.incremental)))
+
+; Full mode test
+
+(rule
+   (target  131.full)
+   (deps    (:input 131.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 131.expected 131.full)))
+
+
+; Test for 132.cmc
+; Incremental test
+
+(rule
+   (target  132.incremental)
+   (deps    (:input 132.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 132.expected 132.incremental)))
+
+; Full mode test
+
+(rule
+   (target  132.full)
+   (deps    (:input 132.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 132.expected 132.full)))
+
+
+; Test for 133.cmc
+; Incremental test
+
+(rule
+   (target  133.incremental)
+   (deps    (:input 133.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 133.expected 133.incremental)))
+
+; Full mode test
+
+(rule
+   (target  133.full)
+   (deps    (:input 133.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 133.expected 133.full)))
+
+
+; Test for 134.cmc
+; Incremental test
+
+(rule
+   (target  134.incremental)
+   (deps    (:input 134.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 134.expected 134.incremental)))
+
+; Full mode test
+
+(rule
+   (target  134.full)
+   (deps    (:input 134.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 134.expected 134.full)))
+
+
+; Test for 135.cmc
+; Incremental test
+
+(rule
+   (target  135.incremental)
+   (deps    (:input 135.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 135.expected 135.incremental)))
+
+; Full mode test
+
+(rule
+   (target  135.full)
+   (deps    (:input 135.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 135.expected 135.full)))
+
+
+; Test for 136.cmc
+; Incremental test
+
+(rule
+   (target  136.incremental)
+   (deps    (:input 136.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 136.expected 136.incremental)))
+
+; Full mode test
+
+(rule
+   (target  136.full)
+   (deps    (:input 136.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 136.expected 136.full)))
+
+
+; Test for 137.cmc
+; Incremental test
+
+(rule
+   (target  137.incremental)
+   (deps    (:input 137.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 137.expected 137.incremental)))
+
+; Full mode test
+
+(rule
+   (target  137.full)
+   (deps    (:input 137.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 137.expected 137.full)))
+
+
+; Test for 138.cmc
+; Incremental test
+
+(rule
+   (target  138.incremental)
+   (deps    (:input 138.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 138.expected 138.incremental)))
+
+; Full mode test
+
+(rule
+   (target  138.full)
+   (deps    (:input 138.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 138.expected 138.full)))
+
+
+; Test for 139.cmc
+; Incremental test
+
+(rule
+   (target  139.incremental)
+   (deps    (:input 139.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 139.expected 139.incremental)))
+
+; Full mode test
+
+(rule
+   (target  139.full)
+   (deps    (:input 139.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 139.expected 139.full)))
+
+
+; Test for 146.cmc
+; Incremental test
+
+(rule
+   (target  146.incremental)
+   (deps    (:input 146.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 146.expected 146.incremental)))
+
+; Full mode test
+
+(rule
+   (target  146.full)
+   (deps    (:input 146.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 146.expected 146.full)))
+
+
+; Test for 147.cmc
+; Incremental test
+
+(rule
+   (target  147.incremental)
+   (deps    (:input 147.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 147.expected 147.incremental)))
+
+; Full mode test
+
+(rule
+   (target  147.full)
+   (deps    (:input 147.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 147.expected 147.full)))
+
+
+; Test for 148.cmc
+; Incremental test
+
+(rule
+   (target  148.incremental)
+   (deps    (:input 148.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 148.expected 148.incremental)))
+
+; Full mode test
+
+(rule
+   (target  148.full)
+   (deps    (:input 148.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 148.expected 148.full)))
+
+
+; Test for 149.cmc
+; Incremental test
+
+(rule
+   (target  149.incremental)
+   (deps    (:input 149.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 149.expected 149.incremental)))
+
+; Full mode test
+
+(rule
+   (target  149.full)
+   (deps    (:input 149.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 149.expected 149.full)))
+
+
+; Test for 150.cmc
+; Incremental test
+
+(rule
+   (target  150.incremental)
+   (deps    (:input 150.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 150.expected 150.incremental)))
+
+; Full mode test
+
+(rule
+   (target  150.full)
+   (deps    (:input 150.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 150.expected 150.full)))
+
+
+; Test for 151.cmc
+; Incremental test
+
+(rule
+   (target  151.incremental)
+   (deps    (:input 151.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 151.expected 151.incremental)))
+
+; Full mode test
+
+(rule
+   (target  151.full)
+   (deps    (:input 151.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 151.expected 151.full)))
+
+
+; Test for 152.cmc
+; Incremental test
+
+(rule
+   (target  152.incremental)
+   (deps    (:input 152.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 152.expected 152.incremental)))
+
+; Full mode test
+
+(rule
+   (target  152.full)
+   (deps    (:input 152.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 152.expected 152.full)))
+
+
+; Test for 153.cmc
+; Incremental test
+
+(rule
+   (target  153.incremental)
+   (deps    (:input 153.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 153.expected 153.incremental)))
+
+; Full mode test
+
+(rule
+   (target  153.full)
+   (deps    (:input 153.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 153.expected 153.full)))
+
+
+; Test for 154.cmc
+; Incremental test
+
+(rule
+   (target  154.incremental)
+   (deps    (:input 154.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 154.expected 154.incremental)))
+
+; Full mode test
+
+(rule
+   (target  154.full)
+   (deps    (:input 154.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 154.expected 154.full)))
+
+
+; Test for 155.cmc
+; Incremental test
+
+(rule
+   (target  155.incremental)
+   (deps    (:input 155.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 155.expected 155.incremental)))
+
+; Full mode test
+
+(rule
+   (target  155.full)
+   (deps    (:input 155.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 155.expected 155.full)))
+
+
+; Test for 156.cmc
+; Incremental test
+
+(rule
+   (target  156.incremental)
+   (deps    (:input 156.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 156.expected 156.incremental)))
+
+; Full mode test
+
+(rule
+   (target  156.full)
+   (deps    (:input 156.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 156.expected 156.full)))
+
+
+; Test for 157.cmc
+; Incremental test
+
+(rule
+   (target  157.incremental)
+   (deps    (:input 157.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 157.expected 157.incremental)))
+
+; Full mode test
+
+(rule
+   (target  157.full)
+   (deps    (:input 157.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 157.expected 157.full)))
+
+
+; Test for 158.cmc
+; Incremental test
+
+(rule
+   (target  158.incremental)
+   (deps    (:input 158.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 158.expected 158.incremental)))
+
+; Full mode test
+
+(rule
+   (target  158.full)
+   (deps    (:input 158.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 158.expected 158.full)))
+
+
+; Test for 159.cmc
+; Incremental test
+
+(rule
+   (target  159.incremental)
+   (deps    (:input 159.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 159.expected 159.incremental)))
+
+; Full mode test
+
+(rule
+   (target  159.full)
+   (deps    (:input 159.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 159.expected 159.full)))
+
+
+; Test for 160.cmc
+; Incremental test
+
+(rule
+   (target  160.incremental)
+   (deps    (:input 160.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 160.expected 160.incremental)))
+
+; Full mode test
+
+(rule
+   (target  160.full)
+   (deps    (:input 160.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 160.expected 160.full)))
+
+
+; Test for 161.cmc
+; Incremental test
+
+(rule
+   (target  161.incremental)
+   (deps    (:input 161.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 161.expected 161.incremental)))
+
+; Full mode test
+
+(rule
+   (target  161.full)
+   (deps    (:input 161.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 161.expected 161.full)))
+
+
+; Test for 162.cmc
+; Incremental test
+
+(rule
+   (target  162.incremental)
+   (deps    (:input 162.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 162.expected 162.incremental)))
+
+; Full mode test
+
+(rule
+   (target  162.full)
+   (deps    (:input 162.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 162.expected 162.full)))
+
+
+; Test for 163.cmc
+; Incremental test
+
+(rule
+   (target  163.incremental)
+   (deps    (:input 163.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 163.expected 163.incremental)))
+
+; Full mode test
+
+(rule
+   (target  163.full)
+   (deps    (:input 163.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 163.expected 163.full)))
+
+
+; Test for 164.cmc
+; Incremental test
+
+(rule
+   (target  164.incremental)
+   (deps    (:input 164.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 164.expected 164.incremental)))
+
+; Full mode test
+
+(rule
+   (target  164.full)
+   (deps    (:input 164.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 164.expected 164.full)))
+
+
+; Test for 165.cmc
+; Incremental test
+
+(rule
+   (target  165.incremental)
+   (deps    (:input 165.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 165.expected 165.incremental)))
+
+; Full mode test
+
+(rule
+   (target  165.full)
+   (deps    (:input 165.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 165.expected 165.full)))
+
+
+; Test for 166.cmc
+; Incremental test
+
+(rule
+   (target  166.incremental)
+   (deps    (:input 166.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 166.expected 166.incremental)))
+
+; Full mode test
+
+(rule
+   (target  166.full)
+   (deps    (:input 166.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 166.expected 166.full)))
+
+
+; Test for 167.cmc
+; Incremental test
+
+(rule
+   (target  167.incremental)
+   (deps    (:input 167.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 167.expected 167.incremental)))
+
+; Full mode test
+
+(rule
+   (target  167.full)
+   (deps    (:input 167.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff 167.expected 167.full)))
+
+
+; Test for test.cmc
+; Incremental test
+
+(rule
+   (target  test.incremental)
+   (deps    (:input test.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=incremental --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff test.expected test.incremental)))
+
+; Full mode test
+
+(rule
+   (target  test.full)
+   (deps    (:input test.cmc))
+   (package dolmen_bin)
+   (action (chdir %{workspace_root}
+            (with-outputs-to %{target}
+             (with-accepted-exit-codes (or 0 (not 0))
+              (run dolmen --mode=full --color=never %{input} %{read-lines:flags.dune}))))))
+(rule
+  (alias runtest)
+  (package dolmen_bin)
+  (action (diff test.expected test.full)))
+
+
 ; Auto-generated part end

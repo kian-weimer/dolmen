@@ -1,0 +1,9 @@
+Error Uncaught exception:
+      File "src/typecheck/thf.ml", line 2496, characters 11-17: Assertion failed
+Raised at Dolmen_type__Thf.Make.parse_sys_app in file "src/typecheck/thf.ml", line 2496, characters 11-23
+Called from Dolmen_type__Thf.Make.check_sys in file "src/typecheck/thf.ml", line 2681, characters 4-137
+Called from Dolmen_loop__Typer.Typer.typing_wrap in file "src/loop/typer.ml", line 1570, characters 10-53
+Called from Dolmen_loop__Typer.Make.check in file "src/loop/typer.ml", line 2114, characters 18-70
+Called from Dolmen_loop__Typer.Make.typecheck in file "src/loop/typer.ml", line 2160, characters 24-34
+Called from Dolmen_loop__Pipeline.Make.eval_op in file "src/loop/pipeline.ml", line 87, characters 8-17
+

@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/165.cmc", line 1, character 25-26:
+1 | (declare-enum-sort enum ())
+                             ^
+Error while parsing an enumeration declaration, read a closing parenthesis,
+      but expected a nonempty list of enumeration variables  `(enum1 enum2
+      ...)`.

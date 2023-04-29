@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/125.cmc", line 1, character 29-34:
+1 | (define-system sys :input () error)
+                                 ^^^^^
+Error while parsing a system definition, read the symbol 'error',
+      but expected a keyword (:input, :output, :local, :subsys, :init,
+      :trans, :inv).

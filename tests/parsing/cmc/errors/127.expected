@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/127.cmc", line 1, character 26-27:
+1 | (define-system sys :trans )
+                              ^
+Error while parsing a transition function definition,
+      read a closing parenthesis,
+      but expected an s-expression.

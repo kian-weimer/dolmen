@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/118_def_system_missing_keyword.cmc", line 1, character 18-19:
+1 | (define-system sys)
+                      ^
+Error while parsing a system definition, read a closing parenthesis,
+      but expected a keyword (:input, :output, :local, :subsys, :init,
+      :trans, :inv).

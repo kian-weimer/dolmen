@@ -1,0 +1,5 @@
+File "tests/parsing/cmc/errors/129.cmc", line 1, character 28-29:
+1 | (define-system sys :subsys ())
+                                ^
+Error while parsing a subsystem declaration, read a closing parenthesis,
+      but expected a local subsystem name.

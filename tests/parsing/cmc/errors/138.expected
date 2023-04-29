@@ -1,0 +1,5 @@
+File "tests/parsing/cmc/errors/138.cmc", line 1, character 36-42:
+1 | (define-system system :subsys (a s) :query)
+                                        ^^^^^^
+Error while parsing a system definition, read the reserved word ':query',
+      but expected a keyword (:subsys, :init, :trans, :inv).

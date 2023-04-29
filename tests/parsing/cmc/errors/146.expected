@@ -1,0 +1,7 @@
+File "tests/parsing/cmc/errors/146.cmc", line 1, character 18-27:
+1 | (check-system sys :reachabe ((q (r))) f)
+                      ^^^^^^^^^
+Error while parsing a check system command definition,
+      read the keyword ':reachabe',
+      but expected a keyword from the set  (:input, :output, :local,
+      :reachable, :query, :queries).

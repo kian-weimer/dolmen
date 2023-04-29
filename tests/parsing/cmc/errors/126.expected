@@ -1,0 +1,6 @@
+File "tests/parsing/cmc/errors/126.cmc", line 1, character 35-36:
+1 | (define-system sys :input ((a Int)))
+                                       ^
+Error while parsing a system definition, read a closing parenthesis,
+      but expected a subsystem declaration or function definition (:init,
+      :trans, :inv).
