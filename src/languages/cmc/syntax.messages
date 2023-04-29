@@ -4479,19 +4479,6 @@ file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL CLOSE UNDERSCORE
 an enumeration declaration
 a closing parenthesis
 
-file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL UNDERSCORE
-##
-## Ends in an error in state: 313.
-##
-## nonempty_list(enum_constructor_dec) -> enum_constructor_dec . [ CLOSE ]
-## nonempty_list(enum_constructor_dec) -> enum_constructor_dec . nonempty_list(enum_constructor_dec) [ CLOSE ]
-##
-## The known suffix of the stack is as follows:
-## enum_constructor_dec
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
 file: OPEN CHECK_SYS UNDERSCORE
 ##
 ## Ends in an error in state: 365.
@@ -4505,3 +4492,16 @@ file: OPEN CHECK_SYS UNDERSCORE
 174
 a check system command
 a symbol corresponding to a defined system
+
+file: OPEN DECLARE_ENUM_SORT SYMBOL OPEN SYMBOL UNDERSCORE
+##
+## Ends in an error in state: 313.
+##
+## nonempty_list(enum_constructor_dec) -> enum_constructor_dec . [ CLOSE ]
+## nonempty_list(enum_constructor_dec) -> enum_constructor_dec . nonempty_list(enum_constructor_dec) [ CLOSE ]
+##
+## The known suffix of the stack is as follows:
+## enum_constructor_dec
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
