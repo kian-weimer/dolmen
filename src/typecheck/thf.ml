@@ -2475,12 +2475,15 @@ module Make
           ty_args, l'
         | `Fixed (l, l') -> l, l'
         | `Bad_arity _ ->
+          Format.printf "Bad arity in check-system definition of subsystem declaration.\n" ;
           assert false (*TODO better error*)(* _bad_term_arity env f expected actual ast *)
       in
       let t_args = List.map (parse_term env) t_l in
 
       (* TODO Do better here once we change the type of a sys def *)
-      assert (Ty.equal (T.ty (T.apply_cst s ty_args t_args)) (Ty.prop))
+      if (not (Ty.equal (T.ty (T.apply_cst s ty_args t_args)) (Ty.prop))) then (
+        Format.printf "Bad arity in check-system definition of subsystem declaration.\n" ;
+        assert false)
 
   let parse_sys_app env sid input output local = 
     let sys = match find_system env sid with
@@ -2509,7 +2512,9 @@ module Make
     match op_funct_app (parse_expr env) prop with 
       (* TODO: Add proper errors rather than assertions *)
       | Some (Term body) ->
-        assert ((T.ty body) == Ty.prop)
+        if (not ((T.ty body) == Ty.prop)) then (
+          Format.printf ":init, :trans, or :inv statement is of type %a but must be boolean.\n" Ty.print (T.ty body) ;
+          assert false)
       | _ -> () (* no body means valid typecheck*)
 
   let parse_sys env primed_env (d: Stmt.sys_def) = 
@@ -2582,7 +2587,9 @@ module Make
     parent_system.subs |> (List.fold_left (fun other_subs (local_name, sub_name, args) -> (
       (* Make sure local name isn't used twice *)
       let local_name_not_defined = ((List.find_opt (Id.equal local_name) other_subs) = None) in
-      assert local_name_not_defined ;
+      (if (not local_name_not_defined) then 
+        Format.printf "Subsystem with local name %a is already declared and cannot be redeclared in %a\n" Id.print local_name Id.print parent_system.id ;
+        assert local_name_not_defined );
       let rec split k xs = match xs with
         | [] -> failwith "firstk"
         | x::xs -> 
@@ -2643,7 +2650,9 @@ module Make
         (* let _ = mk_term_var env (Id.name id) reachability_type in *)
         
         (* TODO make this a proper error *)
-        assert (Ty.equal reachability_type Ty.prop) ;
+        (if (not (Ty.equal reachability_type Ty.prop)) then 
+          Format.printf "Reachability prop %a has type %a but must be of type boolean\n" Id.print id Ty.print reachability_type ;
+          assert (Ty.equal reachability_type Ty.prop) ) ;
 
         (* let env = add_term_var env id term_var body in *)
         id :: prop_map (* could make this a map for quicker lookups *)
@@ -2658,7 +2667,7 @@ module Make
   let parse_queries prop_map (d: Stmt.sys_check) = 
     let check_query queries (id, props) = 
       (* TODO make a better error message and possibly use a map *)
-      assert (not (List.mem id queries)); 
+      (if (List.mem id queries) then Format.printf "Query %a already defined\n" Id.print id ; assert (not (List.mem id queries))); 
 
       (* TODO make a better error message *)
       (* possibly prevent duplicate uses of props *)
@@ -2667,7 +2676,9 @@ module Make
       (* possibly prevent duplicate uses of props *)
       List.iter (fun prop -> match prop with 
         | { Ast.term = Ast.Symbol s; _ } ->
-          assert (not ((List.find_opt (Id.equal s) prop_map) = None))
+          if ((List.find_opt (Id.equal s) prop_map) = None) then (
+            Format.printf "Reachability property %a not defined.\n" Id.print s ;
+            assert (not ((List.find_opt (Id.equal s) prop_map) = None)));
         | _ -> assert false ) props ;
 
       id :: queries in
