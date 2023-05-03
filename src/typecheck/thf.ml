@@ -2475,14 +2475,14 @@ module Make
           ty_args, l'
         | `Fixed (l, l') -> l, l'
         | `Bad_arity _ ->
-          Format.printf "Bad arity in check-system definition of subsystem declaration.\n" ;
+          Format.printf "Bad arity in check-system definition or subsystem declaration.\n" ;
           assert false (*TODO better error*)(* _bad_term_arity env f expected actual ast *)
       in
       let t_args = List.map (parse_term env) t_l in
 
       (* TODO Do better here once we change the type of a sys def *)
       if (not (Ty.equal (T.ty (T.apply_cst s ty_args t_args)) (Ty.prop))) then (
-        Format.printf "Bad arity in check-system definition of subsystem declaration.\n" ;
+        Format.printf "Bad arity in check-system definition or subsystem declaration.\n" ;
         assert false)
 
   let parse_sys_app env sid input output local = 
@@ -2496,7 +2496,9 @@ module Make
       if ((List.length input) > 0) then parse_sys_app_symbol env i input ;
       if List.length output > 0 then parse_sys_app_symbol env o output ;
       if List.length local > 0 then parse_sys_app_symbol env l local ;
-    | _ -> assert false (* TODO ADD PROPER ERROR *)
+    | _ -> 
+      Format.printf "System with name %a is not defined.\n" Id.print sid;
+      assert false (* TODO ADD PROPER ERROR *)
 
   let op_list_to_list l =
     match l with
