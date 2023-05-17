@@ -2644,29 +2644,31 @@ module Make
   (* High-level parsing function *)
   (* ************************************************************************ *)
   
-  let parse_reachability_statement env prop_map r = 
+  let parse_property env prop_type_name prop_map r = 
     let id, (body: Ast.t) = r in
     match (parse_expr env body) with
       | Term t -> 
-        let reachability_type = T.ty t in  
+        let prop_type = T.ty t in  
         (* let _ = mk_term_var env (Id.name id) reachability_type in *)
         
         (* TODO make this a proper error *)
-        (if (not (Ty.equal reachability_type Ty.prop)) then 
-          Format.printf "Reachability prop %a has type %a but must be of type boolean\n" Id.print id Ty.print reachability_type ;
-          assert (Ty.equal reachability_type Ty.prop) ) ;
+        (if (not (Ty.equal prop_type Ty.prop)) then 
+          Format.printf "%s prop %a has type %a but must be of type boolean\n" prop_type_name Id.print id Ty.print prop_type ;
+          assert (Ty.equal prop_type Ty.prop) ) ;
 
         (* let env = add_term_var env id term_var body in *)
         id :: prop_map (* could make this a map for quicker lookups *)
         
         | _ -> assert false (* TODO add real error here *)
 
-  let parse_properties _ primed_env (d: Stmt.sys_check) = 
-    (* Parse reach bodies to verify that they are boolean *)
-    List.fold_left (parse_reachability_statement primed_env) [] d.reachable 
-    (* Add new variables to the environment representing these boolean properties *)
-  
-  let parse_queries prop_map (d: Stmt.sys_check) = 
+  let parse_reachable_properties _ primed_env (d: Stmt.sys_check) = 
+    (* Parse reach and assumption bodies to verify that they are boolean *)
+    List.fold_left (parse_property primed_env "Reachability") [] d.reachable
+   
+  let parse_assumption_properties _ primed_env (d: Stmt.sys_check) = 
+    List.fold_left (parse_property primed_env "Assumption") [] d.assumption 
+
+  let parse_queries (a_map, r_map) (d: Stmt.sys_check) = 
     let check_query queries (id, props) = 
       (* TODO make a better error message and possibly use a map *)
       (if (List.mem id queries) then Format.printf "Query %a already defined\n" Id.print id ; assert (not (List.mem id queries))); 
@@ -2676,12 +2678,23 @@ module Make
        
       (* TODO add better error messages *)
       (* possibly prevent duplicate uses of props *)
-      List.iter (fun prop -> match prop with 
+      let r_seen = (List.fold_left (fun r_seen prop -> match prop with 
         | { Ast.term = Ast.Symbol s; _ } ->
-          if ((List.find_opt (Id.equal s) prop_map) = None) then (
-            Format.printf "Reachability property %a not defined.\n" Id.print s ;
-            assert (not ((List.find_opt (Id.equal s) prop_map) = None)));
-        | _ -> assert false ) props ;
+          (* prop is an assumption *)
+          (if ((List.find_opt (Id.equal s) a_map) != None) then (
+            (if r_seen then (Format.printf "An assumption was found in querty %a after a reachability property. All assumptions must be stated first." Id.print id) ; assert (not r_seen) ) ;
+            r_seen
+          ) else
+            (* prop is a reachability statement *)
+            (if ((List.find_opt (Id.equal s) r_map) != None) then (
+              true
+            ) 
+            (* Prop was not declared *)
+            else 
+              failwith (Format.asprintf "Property %a referenced in query %a is not defined" Id.print s Id.print id)));
+        | _ -> assert false ) false props) in
+
+      if (not r_seen) then Format.printf "At least one reachability property must be present in a query." ; assert r_seen ;
 
       id :: queries in
     List.fold_left check_query [] d.queries
@@ -2700,10 +2713,11 @@ module Make
     (* Verify the reachability predicate assignments are valid. Add to env *)
     (* TODO We will need a third env with only primed vars once we add more than just reachability
        properties. See the check-system definition on GitHub for clarification. *)
-    let prop_map = parse_properties ssig_env ssig_primed_env c in
+    let reachability_prop_map = parse_reachable_properties ssig_env ssig_primed_env c in
+    let assumption_prop_map = parse_assumption_properties ssig_env ssig_primed_env c in
 
     (* Type check the queries. Try to treat them like function decls? (where args must be bools)  *)
-    let _ = parse_queries prop_map c in
+    let _ = parse_queries (assumption_prop_map, reachability_prop_map) c in
 
     (* No need to add the check-system to the environment?  *)
     `Sys_check

@@ -56,12 +56,13 @@ type sys_def = {
 }
 
 type sys_check = {
-  id        : Id.t;
-  input     : term list option;
-  output    : term list option;
-  local     : term list option;
-  reachable : (Id.t * term) list;
-  queries   : (Id.t * term list) list;
+  id         : Id.t;
+  input      : term list option;
+  output     : term list option;
+  local      : term list option;
+  reachable  : (Id.t * term) list;
+  assumption : (Id.t * term) list;
+  queries    : (Id.t * term list) list;
 }
 
 type enum_sort = {
@@ -311,7 +312,7 @@ let print_def_sys fmt ({ id; loc = _; input; output; local; init; trans; inv; su
       print_attr inv
       print_subs subs
 
-let print_check_sys fmt ({id; input; output; local; reachable; queries}: sys_check) =
+let print_check_sys fmt ({id; input; output; local; reachable; assumption; queries}: sys_check) =
   let print_formula base_name fmt (name, term) = 
     Format.fprintf fmt "@,%s %a = %a;" base_name Id.print name Term.print term in
 
@@ -320,11 +321,12 @@ let print_check_sys fmt ({id; input; output; local; reachable; queries}: sys_che
       Id.print name
       (Misc.print_list ~print_sep:Format.fprintf ~sep:" " ~print:Term.print) formula_names in
 
-  Format.fprintf fmt "@[<hov 2>check-sys:@ %a =@ {@,input = %a;@,output = %a;@,local = %a;%a@;%a@,}@]"
+  Format.fprintf fmt "@[<hov 2>check-sys:@ %a =@ {@,input = %a;@,output = %a;@,local = %a;%a@;%a@;%a@,}@]"
   Id.print id
   print_opt_attrs input
   print_opt_attrs output
   print_opt_attrs local
+  (Misc.print_list ~print_sep:Format.fprintf ~sep:"@," ~print:(print_formula "assumption")) assumption
   (Misc.print_list ~print_sep:Format.fprintf ~sep:"@," ~print:(print_formula "reachable")) reachable
   (Misc.print_list ~print_sep:Format.fprintf ~sep:"@," ~print:print_query) queries
 
@@ -490,8 +492,9 @@ let mk_check_sys ?loc id vars formulas queries =
   let output = List.assoc_opt ":output" vars in
   let local = List.assoc_opt ":local" vars in
   let reachable = assoc_many ":reachable" formulas in
+  let assumption = assoc_many ":assumption" formulas in
 
-  mk ?loc (Chk_sys {id; input; output; local; reachable; queries} )
+  mk ?loc (Chk_sys {id; input; output; local; reachable; assumption; queries} )
 
 let group_defs ?loc ?attrs ~recursive l =
   let defs, others = List.fold_left (fun (defs, others) s ->

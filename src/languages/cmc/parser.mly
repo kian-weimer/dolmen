@@ -97,6 +97,7 @@ reserved:
   | SYS_TRANS { ":trans" }
   | SYS_INV { ":inv" }
   | CHECK_REACH { ":reachable" }
+  | CHECK_ASSUMPTION { ":assumption" }
   | CHECK_QUERY { ":query" }
   | CHECK_QUERIES { ":queries" }
 ;
@@ -380,6 +381,8 @@ system_def:
 formula:
   | CHECK_REACH OPEN s=SYMBOL body=term CLOSE
   { ":reachable", (I.(mk term s), body) }
+  | CHECK_ASSUMPTION OPEN s=SYMBOL body=term CLOSE
+  { ":assumption", (I.(mk term s), body) }
 
 query_base:
   | OPEN s=SYMBOL OPEN args=pattern_symbol* CLOSE CLOSE

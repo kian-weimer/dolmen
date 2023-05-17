@@ -53,6 +53,7 @@
        SYS_INV
        CHECK_SYS
        CHECK_REACH
+       CHECK_ASSUMPTION
        CHECK_QUERY
        CHECK_QUERIES
 %%

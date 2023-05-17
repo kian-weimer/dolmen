@@ -80,6 +80,7 @@
     | SYS_TRANS -> reserved_descr ":trans"
     | SYS_INV -> reserved_descr ":inv"
     | CHECK_REACH -> reserved_descr ":reachable"
+    | CHECK_ASSUMPTION -> reserved_descr ":assumption"
     | CHECK_QUERY -> reserved_descr ":query"
     | CHECK_QUERIES -> reserved_descr ":queries"
 
@@ -206,6 +207,7 @@ rule token newline = parse
   | ":trans"            { SYS_TRANS }
   | ":inv"              { SYS_INV }
   | ":reachable"        { CHECK_REACH }
+  | ":assumption"        { CHECK_ASSUMPTION }
   | ":query"            { CHECK_QUERY }
   | ":queries"          { CHECK_QUERIES }
 

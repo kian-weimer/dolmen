@@ -82,12 +82,13 @@ type sys_def = {
 (** TODO *)
 
 type sys_check = {
-  id        : Id.t;
-  input     : term list option;
-  output    : term list option;
-  local     : term list option;
-  reachable : (Id.t * term) list;
-  queries   : (Id.t * term list) list;
+  id         : Id.t;
+  input      : term list option;
+  output     : term list option;
+  local      : term list option;
+  reachable  : (Id.t * term) list;
+  assumption : (Id.t * term) list;
+  queries    : (Id.t * term list) list;
 }
 
 type enum_sort = {
